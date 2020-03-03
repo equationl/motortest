@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">MotorTest-马达测试</string>
+    <string name="main_toast_notSupportVibrator">当前设备不支持！</string>
+    <string name="main_text_predefined">系统预设：</string>
+    <string name="main_text_click">单击</string>
+    <string name="main_text_doubleClick">双击</string>
+    <string name="main_text_heavyClick">重击</string>
+    <string name="main_text_tick">轻击</string>
+    <string name="main_text_predefined_notSupport">系统预设（需要安卓10及以上）</string>
+    <string name="main_text_free_test">连续测试：</string>
+    <string name="main_text_amplitud">振动强度（振幅）：</string>
+    <string name="main_text_notSupport_amplitude">设置振动强度：当前设备不支持此选项</string>
+    <string name="main_menu_high_accuracy">使用高精度</string>
+    <string name="main_text_pro">100</string>
+    <string name="main_text_rate">震动频率</string>
+    <string name="main_btn_free_start">启动</string>
+    <string name="main_btn_free_stop">停止</string>
+    <string name="main_text_app_predefined">程序预设：</string>
+    <string name="main_btn_pre_start">启动</string>
+    <string name="main_btn_pre_stop">停止</string>
+    <string name="main_edit_diy_timings">timings（时序）</string>
+    <string name="main_edit_diy_amplitudes">amplitudes（振幅）</string>
+    <string name="main_edit_diy_repeat">repeat（重复）</string>
+    <string name="main_btn_diy_start">启动</string>
+    <string name="main_btn_diy_stop">停止</string>
+    <string name="main_text_diy">自由创作：</string>
+    <string name="main_dialog_help_content_summary">
+        <![CDATA[
+        <h3>简介</h3>
+        本应用可以实现对安卓智能手机的振动马达进行测试的需求。总共分为4组测试方法。<br />
+        <h3>测试方法简介</h3>
+        <h4>系统预设</h4>
+        在该组测试中，将会以安卓系统已经调教好的四种振动模式振动，是最基础的振动测试。需要注意的是，该组只支持安卓10以上设备。<br />
+        <h4>程序预设</h4>
+        在该组测试中，将会以本人调教好的多种振动模式进行测试，且振动模式还在不断增加中。<br />
+        <h4>连续测试</h4>
+        在该组测试，你可以自行指定振动强度和振动频率进行连续测试。<br />
+        <h4>自由创作</h4>
+        在该组测试中，你可以完完全全自定义振动，我已经把谷歌开放出来的所有能够控制振动的参数都贴出来了，欢迎各位大佬使用，使用说明请移步“用法”查看。<br />
+        ps：欢迎各位大佬使用自由创作调试后提交你的调教方案给我们,我们会在下次更新时加入至程序预设中。
+        ]]>
+        </string>
+    <string name="main_dialog_help_content_usage">
+        <![CDATA[
+        <h1>自由创作：</h1>
+        自由创作可以指定三个值：<b>timings</b>、<b>amplitudes</b>、<b>repeat</b>。<br />
+        <h3>timings（时序）：</h3>表示时序与振幅组合中的持续时间，只能为大于等于0的整数，为0时将被忽略，单位毫秒,使用英文逗号将不同数值分割。例如：<br />
+        <i>100,200,100</i> <br />
+        表示先运行100ms、然后运行200ms、最后运行100ms。 <br />
+        <h3>amplitudes（振幅）：</h3>表示时序与振幅组合中的振幅，影响振动时的振动强度，取值范围0 - 255之间的整数，为0时表示关闭马达，使用英文逗号将不同数值分割。例如：<br />
+        <i>255,0,255</i> <br />
+        表示先以255振幅运行、然后停止、最后又以255振幅运行。 <br />
+        <h3>repeat（重复）：</h3>表示重复时序与振幅组合的位置，取值范围-1 - 上述组合的长度，为-1时表示不重复。<br />
+        一个完整的示例如下：<br />
+        timings：<i>100,200,100</i> <br />
+        amplitudes：<i>255,0,255</i> <br />
+        repeat：<i>0</i> <br />
+        以上示例表示：0：以255振幅振动100ms；1:之后停止200ms；2:又以255振幅振动100ms。然后从序号0开始重复以上组合。<br />
+        <b>注意：</b>
+        1.时序和振幅必须一一对应！<br />
+        2.安卓8.0以下不支持控制振幅！（即振幅只支持0（启动马达）和非0（停止马达））<br />
+        ]]>
+    </string>
+    <string name="main_dialog_help_content_about">
+        <![CDATA[
+        其实该项目早在去年就已经有想法并且开始着手制作，但是当时预想的并不是振动测试，而是妄图通过振动马达播放音乐。很显然，失败了，于是就有了这个“嗡嗡嗡”测试app。<br />
+        但是或许这并不是痴心妄想，因为我之所以会产生这种想法完全源于我的三星s10就支持设置不同的振动模式，而不同的模式就是不同的旋律！这至少说明原则上是可以实现的。<br />
+        不过我苦思冥想许久，翻阅了大量资料，查看了大量源码，始终无法找到解决方案。如果有大佬恰巧对此有所看法，欢迎来此贴和我讨论：<a href="https://v2ex.com/t/645640">有没有可能在软件层面实现安卓手机使用线性马达播放音乐？</a><br />
+        另外，我的另一款正经app也欢迎大家试用：<a href="https://www.coolapk.com/apk/153839">隐云图解制作-更方便的视频截图与台词拼接</a><br />
+        ]]>
+    </string>
+    <string name="main_dialog_help_content_update">
+        <![CDATA[
+        <h3>1.2</h3>
+        *添加是否后台振动的选项<br />
+        *优化自由创作模式<br />
+        &nbsp;&nbsp;&nbsp;-加强输入内容检查<br />
+        &nbsp;&nbsp;&nbsp;-支持保存、分享创作内容<br />
+
+        <h3>1.1</h3>
+        *提高兼容性<br />
+        &nbsp;&nbsp;&nbsp;-UI兼容低dpi手机 <br />
+        &nbsp;&nbsp;&nbsp;-api兼容至17（安卓4.2） <br />
+        *优化UI <br />
+        &nbsp;&nbsp;&nbsp;-优化使用说明Dialog布局 <br />
+        &nbsp;&nbsp;&nbsp;-优化FAB位置 <br />
+        &nbsp;&nbsp;&nbsp;-优化按钮位置 <br />
+        *修复退出软件后振动未停止 <br />
+
+        <h3>1.0</h3>
+        *初始版本<br />
+        ]]>
+    </string>
+    <string name="main_dialog_tab_summary">简介</string>
+    <string name="main_dialog_tab_usage">用法</string>
+    <string name="main_dialog_tab_about">关于</string>
+    <string name="main_dialog_tab_update">更新</string>
+    <string name="main_menu_btn_diy_run">运行</string>
+    <string name="main_menu_btn_diy_save">保存</string>
+    <string name="main_menu_btn_diy_open">打开</string>
+    <string name="main_menu_btn_diy_share">分享</string>
+    <string name="main_menu_btn_diy_import">导入</string>
+    <string name="main_action_run_background">后台振动</string>
+    <string name="main_btn_pre_wait">敬请期待</string>
+    <string name="main_edit_diy_tip_text_empty">字段不能为空</string>
+    <string name="main_fab_help_title">使用说明</string>
+    <string name="main_fab_help_btn_close">关闭</string>
+    <string name="main_diy_open_choise_title">选择文件</string>
+    <string name="main_diy_open_choise_btn_close">关闭</string>
+    <string name="main_edit_diy_tip_number_error">错误的数字格式</string>
+    <string name="main_diy_check_timings_less_zero">时序不能小于0</string>
+    <string name="main_diy_check_amplitude_number_error">振幅范围0&#8211;255</string>
+    <string name="main_diy_check_amp_bigThan_tim">振幅数量大于时序数量</string>
+    <string name="main_diy_check_tim_bigThan_amp">时序数量大于振幅数量</string>
+    <string name="main_diy_check_reapeat_outOfIndex">重复索引超出序列</string>
+    <string name="main_diy_check_repeat_wrong_index">错误的索引</string>
+    <string name="main_diy_save_fileName_title">输入文件名</string>
+    <string name="main_diy_save_fileName_btn_sure">确定</string>
+    <string name="main_diy_save_fileName_isEmpty">文件名不能为空</string>
+    <string name="main_diy_save_success">保存成功</string>
+    <string name="main_diy_import_dialog_title">输入数据</string>
+    <string name="main_diy_import_dialog_btn_sure">确定</string>
+    <string name="main_diy_import_text_isEmpty">数据不能为空</string>
+    <string name="main_diy_import_fail">导入失败！</string>
+
+
+    <string-array name="main_spinner_pre">
+        <item>心跳</item>
+        <item>鼓点</item>
+        <item>摇滚</item>
+        <item>敬请期待&#8230;</item>
+    </string-array>
+</resources>

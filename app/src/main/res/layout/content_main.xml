@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/main_text_predefined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/main_text_predefined"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/main_button_click"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_text_click"
+            app:layout_constraintStart_toStartOf="@+id/main_text_predefined"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_predefined" />
+
+        <Button
+            android:id="@+id/main_button_double_click"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/main_text_doubleClick"
+            app:layout_constraintStart_toEndOf="@+id/main_button_click"
+            app:layout_constraintTop_toTopOf="@+id/main_button_click" />
+
+        <Button
+            android:id="@+id/main_button_heavy_click"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/main_text_heavyClick"
+            app:layout_constraintStart_toEndOf="@+id/main_button_double_click"
+            app:layout_constraintTop_toTopOf="@+id/main_button_click" />
+
+        <Button
+            android:id="@+id/main_button_tick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/main_text_tick"
+            app:layout_constraintStart_toEndOf="@+id/main_button_heavy_click"
+            app:layout_constraintTop_toTopOf="@+id/main_button_click" />
+
+        <TextView
+            android:id="@+id/main_text_app_predefined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/main_text_app_predefined"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_button_click" />
+
+        <Spinner
+            android:id="@+id/main_spinner_pre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:entries="@array/main_spinner_pre"
+            app:layout_constraintBottom_toBottomOf="@+id/main_text_app_predefined"
+            app:layout_constraintStart_toEndOf="@+id/main_text_app_predefined"
+            app:layout_constraintTop_toTopOf="@+id/main_text_app_predefined" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_button_layout_app_predefined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_spinner_pre">
+
+            <Button
+                android:id="@+id/main_btn_pre_start"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/main_btn_pre_start"
+                app:layout_constraintEnd_toStartOf="@+id/main_btn_pre_stop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/main_btn_pre_stop"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/main_btn_pre_stop"
+                app:layout_constraintStart_toEndOf="@+id/main_btn_pre_start"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/main_text_free_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/main_text_free_test"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_button_layout_app_predefined" />
+
+        <TextView
+            android:id="@+id/main_text_amplitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/main_text_amplitud"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_free_test" />
+
+        <SeekBar
+            android:id="@+id/main_pro_amplitude"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="50dp"
+            android:max="255"
+            android:progress="100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_amplitude"
+            android:visibility="invisible"/>
+
+        <SeekBar
+            android:id="@+id/main_pro_amplitude2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="50dp"
+            android:max="25"
+            android:progress="10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_amplitude"
+            style="@style/Widget.AppCompat.SeekBar.Discrete" />
+
+        <TextView
+            android:id="@+id/main_pro_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_text_pro"
+            app:layout_constraintStart_toEndOf="@+id/main_pro_amplitude"
+            app:layout_constraintTop_toTopOf="@+id/main_pro_amplitude" />
+
+        <TextView
+            android:id="@+id/main_text_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_text_rate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_pro_amplitude" />
+
+        <SeekBar
+            android:id="@+id/main_pro_rate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="50dp"
+            android:max="100"
+            android:progress="50"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_rate"
+            android:visibility="invisible"/>
+
+        <SeekBar
+            android:id="@+id/main_pro_rate2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="50dp"
+            android:max="10"
+            android:progress="5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_rate"
+            style="@style/Widget.AppCompat.SeekBar.Discrete" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_btn_layout_free_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_pro_rate">
+
+            <Button
+                android:id="@+id/main_btn_free_start"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/main_btn_free_start"
+                app:layout_constraintEnd_toStartOf="@+id/main_btn_free_stop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/main_btn_free_stop"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/main_btn_free_stop"
+                app:layout_constraintStart_toEndOf="@+id/main_btn_free_start"
+                app:layout_constraintTop_toTopOf="@+id/main_btn_free_start" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/main_text_diy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/main_text_diy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_btn_layout_free_test" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/main_layout_diy_timings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_text_diy"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+
+            <EditText
+                android:id="@+id/main_edit_diy_timings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/main_edit_diy_timings"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/main_layout_diy_amplitudes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_layout_diy_timings"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+
+            <EditText
+                android:id="@+id/main_edit_diy_amplitudes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/main_edit_diy_amplitudes"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/main_layout_diy_repeat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_layout_diy_amplitudes"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+
+            <EditText
+                android:id="@+id/main_edit_diy_repeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/main_edit_diy_repeat"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_layout_diy_repeat">
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/main_layout_diy_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Button
+                    android:id="@+id/main_btn_diy_start"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/main_btn_diy_start"
+                    app:layout_constraintEnd_toStartOf="@+id/main_btn_diy_stop"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/main_btn_diy_menu"
+                    style="@style/Widget.App.Button.UnelevatedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_btn_menu_down" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <Button
+                android:id="@+id/main_btn_diy_stop"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/main_btn_diy_stop"
+                app:layout_constraintStart_toEndOf="@+id/main_layout_diy_start"
+                app:layout_constraintTop_toTopOf="@+id/main_layout_diy_start" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
