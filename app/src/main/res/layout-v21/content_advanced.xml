@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:context=".AdvancedActivity"
+    tools:showIn="@layout/activity_advanced">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/main_text_predefined"
+            android:text="@string/advanced_text_predefined"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +25,7 @@
             android:id="@+id/main_button_click"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_text_click"
+            android:text="@string/advanced_text_click"
             app:layout_constraintStart_toStartOf="@+id/main_text_predefined"
             app:layout_constraintTop_toBottomOf="@+id/main_text_predefined" />
 
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/main_text_doubleClick"
+            android:text="@string/advanced_text_doubleClick"
             app:layout_constraintStart_toEndOf="@+id/main_button_click"
             app:layout_constraintTop_toTopOf="@+id/main_button_click" />
 
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/main_text_heavyClick"
+            android:text="@string/advanced_text_heavyClick"
             app:layout_constraintStart_toEndOf="@+id/main_button_double_click"
             app:layout_constraintTop_toTopOf="@+id/main_button_click" />
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="@string/main_text_tick"
+            android:text="@string/advanced_text_tick"
             app:layout_constraintStart_toEndOf="@+id/main_button_heavy_click"
             app:layout_constraintTop_toTopOf="@+id/main_button_click" />
 
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/main_text_app_predefined"
+            android:text="@string/advanced_text_app_predefined"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_button_click" />
 
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:entries="@array/main_spinner_pre"
+            android:entries="@array/advanced_spinner_pre"
             app:layout_constraintBottom_toBottomOf="@+id/main_text_app_predefined"
             app:layout_constraintStart_toEndOf="@+id/main_text_app_predefined"
             app:layout_constraintTop_toTopOf="@+id/main_text_app_predefined" />
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="@string/main_btn_pre_start"
+                android:text="@string/advanced_btn_pre_start"
                 app:layout_constraintEnd_toStartOf="@+id/main_btn_pre_stop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/main_btn_pre_stop"
+                android:text="@string/advanced_btn_pre_stop"
                 app:layout_constraintStart_toEndOf="@+id/main_btn_pre_start"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/main_text_free_test"
+            android:text="@string/advanced_text_free_test"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_button_layout_app_predefined" />
 
@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/main_text_amplitud"
+            android:text="@string/advanced_text_amplitud"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_text_free_test" />
@@ -160,7 +160,7 @@
             android:id="@+id/main_pro_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_text_pro"
+            android:text="@string/advanced_text_pro"
             app:layout_constraintStart_toEndOf="@+id/main_pro_amplitude"
             app:layout_constraintTop_toTopOf="@+id/main_pro_amplitude" />
 
@@ -168,7 +168,7 @@
             android:id="@+id/main_text_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_text_rate"
+            android:text="@string/advanced_text_rate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_pro_amplitude" />
@@ -215,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="@string/main_btn_free_start"
+                android:text="@string/advanced_btn_free_start"
                 app:layout_constraintEnd_toStartOf="@+id/main_btn_free_stop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -226,7 +226,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/main_btn_free_stop"
+                android:text="@string/advanced_btn_free_stop"
                 app:layout_constraintStart_toEndOf="@+id/main_btn_free_start"
                 app:layout_constraintTop_toTopOf="@+id/main_btn_free_start" />
 
@@ -238,7 +238,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:text="@string/main_text_diy"
+            android:text="@string/advanced_text_diy"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_btn_layout_free_test" />
 
@@ -254,6 +254,7 @@
             app:layout_constraintTop_toBottomOf="@+id/main_text_diy"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
+            android:transitionGroup="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
             <EditText
@@ -263,7 +264,7 @@
                 android:layout_gravity="center"
                 android:autofillHints=""
                 android:ems="10"
-                android:hint="@string/main_edit_diy_timings"
+                android:hint="@string/advanced_edit_diy_timings"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -279,6 +280,7 @@
             app:layout_constraintTop_toBottomOf="@+id/main_layout_diy_timings"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
+            android:transitionGroup="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
             <EditText
@@ -288,7 +290,7 @@
                 android:layout_gravity="center"
                 android:autofillHints=""
                 android:ems="10"
-                android:hint="@string/main_edit_diy_amplitudes"
+                android:hint="@string/advanced_edit_diy_amplitudes"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -304,6 +306,7 @@
             app:layout_constraintTop_toBottomOf="@+id/main_layout_diy_amplitudes"
             app:endIconMode="clear_text"
             app:errorEnabled="true"
+            android:transitionGroup="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
             <EditText
@@ -313,7 +316,7 @@
                 android:layout_gravity="center"
                 android:autofillHints=""
                 android:ems="10"
-                android:hint="@string/main_edit_diy_repeat"
+                android:hint="@string/advanced_edit_diy_repeat"
                 android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -339,7 +342,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/main_btn_diy_start"
+                    android:text="@string/advanced_btn_diy_start"
                     app:layout_constraintEnd_toStartOf="@+id/main_btn_diy_stop"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -359,7 +362,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@string/main_btn_diy_stop"
+                android:text="@string/advanced_btn_diy_stop"
                 app:layout_constraintStart_toEndOf="@+id/main_layout_diy_start"
                 app:layout_constraintTop_toTopOf="@+id/main_layout_diy_start" />
 

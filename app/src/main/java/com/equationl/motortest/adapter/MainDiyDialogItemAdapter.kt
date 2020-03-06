@@ -29,7 +29,7 @@ class MainDiyDialogItemAdapter(
         val view: View
 
         if (convertView == null) {
-            view = View.inflate(context, R.layout.dialog_main_diy_item, null)
+            view = View.inflate(context, R.layout.dialog_advanced_diy_item, null)
             holder = ViewHolder(view)
             view.tag = holder
         } else {

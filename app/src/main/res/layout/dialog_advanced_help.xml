@@ -15,15 +15,15 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/main_dialog_text_content"
+                android:id="@+id/advanced_dialog_text_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/main_dialog_help_content_summary" />
+                android:text="@string/advanced_dialog_help_content_summary" />
         </LinearLayout>
     </ScrollView>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/main_dialog_tab_layout"
+        android:id="@+id/advanced_dialog_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp">
@@ -31,22 +31,22 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_dialog_tab_summary" />
+            android:text="@string/advanced_dialog_tab_summary" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_dialog_tab_usage" />
+            android:text="@string/advanced_dialog_tab_usage" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_dialog_tab_about" />
+            android:text="@string/advanced_dialog_tab_about" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_dialog_tab_update" />
+            android:text="@string/advanced_dialog_tab_update" />
 
     </com.google.android.material.tabs.TabLayout>
 </LinearLayout>

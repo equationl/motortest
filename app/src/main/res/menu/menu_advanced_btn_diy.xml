@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/main_menu_btn_diy_save"
-        android:title="@string/main_menu_btn_diy_save"/>
+        android:title="@string/advanced_menu_btn_diy_save"/>
     <item android:id="@+id/main_menu_btn_diy_open"
-        android:title="@string/main_menu_btn_diy_open"/>
+        android:title="@string/advanced_menu_btn_diy_open"/>
     <item android:id="@+id/main_menu_btn_diy_import"
-        android:title="@string/main_menu_btn_diy_import"/>
+        android:title="@string/advanced_menu_btn_diy_import"/>
     <item android:id="@+id/main_menu_btn_diy_share"
-        android:title="@string/main_menu_btn_diy_share"/>
+        android:title="@string/advanced_menu_btn_diy_share"/>
 </menu>
