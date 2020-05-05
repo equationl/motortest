@@ -267,7 +267,8 @@ class AdvancedActivity : AppCompatActivity() {
                 0 -> createHeartBeat()
                 1 -> createOffBeat()
                 2 -> createRock()
-                3 -> Toast.makeText(applicationContext, getString(R.string.advanced_btn_pre_wait), Toast.LENGTH_LONG).show()
+                3 -> createTossCoin()
+                4 -> Toast.makeText(applicationContext, getString(R.string.advanced_btn_pre_wait), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -409,6 +410,12 @@ class AdvancedActivity : AppCompatActivity() {
         vibrator.vibrate(timings, amplitudes, 0)
     }
 
+    private fun createTossCoin() {
+        val timings = longArrayOf(10,180,10,90, 4,  90, 7, 80,2, 120,    4,50,2,40,1,40,     4,50,2,40,1,40,      4,50,2,40,1,40)
+        val amplitudes = intArrayOf(255,0, 255,0, 240,0, 240,0, 240,0,    230,0,230,0,230,0,   220,0,220,0,220,0,   210,0,210,0,210,0)
+        vibrator.vibrate(timings, amplitudes, -1)
+    }
+
     private fun diyClickOpen() {
         var alertDialog: AlertDialog? = null
         val databaseHelper = DatabaseHelper.getInstance(applicationContext)
@@ -421,7 +428,7 @@ class AdvancedActivity : AppCompatActivity() {
         }
 
         val mainDiyDialogItemAdapter = MainDiyDialogItemAdapter(nameItems, dateItems, this)
-        mainDiyDialogItemAdapter.setOnPictureDeleteListener(object: MainDiyDialogItemAdapter.OnItemClickListener {
+        mainDiyDialogItemAdapter.setOnItemClickListener(object: MainDiyDialogItemAdapter.OnItemClickListener {
             override fun onClickDelete(position: Int) {
                 databaseHelper.delete(list[position])
                 nameItems.removeAt(position)

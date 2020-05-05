@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">MotorTest-Test Vibrator</string>
+	<string name="advanced_toast_notSupportVibrator">The current device does not support!</string>
+	<string name="advanced_text_predefined">System default:</string>
+	<string name="advanced_text_click">Click</string>
+	<string name="advanced_text_doubleClick">Double</string>
+	<string name="advanced_text_heavyClick">Heavy</string>
+	<string name="advanced_text_tick">Tick</string>
+	<string name="advanced_text_predefined_notSupport">System Default (requires Android 10 and above)</string>
+	<string name="advanced_text_free_test">Continuous test:</string>
+	<string name="advanced_text_amplitud">Vibration intensity (amplitude):</string>
+	<string name="advanced_text_notSupport_amplitude">Set vibration intensity: The current device does not support this option</string>
+	<string name="advanced_menu_high_accuracy">High-precision</string>
+	<string name="advanced_text_pro">100</string>
+	<string name="advanced_text_rate">Vibration frequency</string>
+	<string name="advanced_btn_free_start">Run</string>
+	<string name="advanced_btn_free_stop">Stop</string>
+	<string name="advanced_text_app_predefined">Pre-program:</string>
+	<string name="advanced_btn_pre_start">Run</string>
+	<string name="advanced_btn_pre_stop">Stop</string>
+	<string name="advanced_edit_diy_timings">timings (timing)</string>
+	<string name="advanced_edit_diy_amplitudes">amplitudes (amplitude)</string>
+	<string name="advanced_edit_diy_repeat">repeat (repeat)</string>
+	<string name="advanced_btn_diy_start">Run</string>
+	<string name="advanced_btn_diy_stop">Stop</string>
+	<string name="advanced_text_diy">Creative freedom:</string>
+	<string name="advanced_dialog_help_content_summary"><![CDATA[
+	    <h3>Tip</h3>
+	    Sorry, because I am not familiar with English, so the following content comes from machine translation. If you are familiar with English and are willing to translate it into English, please contact: admin@likehide.com<br />
+        <h3> Introduction </ h3>
+        This application can fulfill the requirements for testing the vibration motor of Android smartphones. There are 4 test methods in total. <br />
+        <h3> Mobile phone motor check </ h3>
+        <a href="https://www.bilibili.com/video/av93475790"> Tutorial </a> from station B: Master Victory, the original tutorial starts at video 5:22 <br />
+        In the continuous test, adjust the vibration intensity to the highest, the vibration frequency to the lowest, and start the vibration. <br />
+        Put the phone to the ear at different angles (side, front, etc.) and listen carefully. The loudest sound over there means the motor is over there. <br />
+        At the same time, because different motors have different vibration modes, if you can obviously feel that the sound on the side is greater than the front and the energy sense is stronger, then it is generally an X-axis linear motor, otherwise it is a Z-axis linear motor. <br />
+        Another way to judge. <br />
+        After turning on the vibration as described above, touch the side of the phone slightly to the desktop. If you can hear the sound of the mobile phone knocking on the table, it is the X-axis linear motor; if there is not much response, it is the Z-axis linear motor. For the Z-axis linear motor, it needs to be laid flat to have the sound of knocking on the table. <br />
+        <h3> Introduction to test methods </ h3>
+        <h4> System default </ h4>
+        In this group of tests, the four vibration modes that have been tuned by the Android system will be used for vibration, which is the most basic vibration test. It should be noted that this group only supports Android 10 and above devices. <br />
+        <h4> Program preset </ h4>
+        In this group of tests, a variety of vibration modes tuned by me will be tested, and the vibration modes are still increasing. <br />
+        <h4> Continuous testing </ h4>
+        In this group of tests, you can specify the vibration intensity and vibration frequency for continuous testing. <br />
+        <h4> Free creation </ h4>
+        In this group of tests, you can completely customize the vibration. I have posted all the parameters that can be controlled by Google to control the vibration. You are welcome to use it. For instructions, please move to "Usage" to view. <br />
+        ps: Everyone is welcome to submit your training plan to us after free creation and debugging. We will add it to the program preset in the next update.
+        ]]></string>
+    <string name="advanced_dialog_help_content_usage">
+        <![CDATA[
+        <h1> Free creation: </ h1>
+        Free creation can specify three values: <b> timings </ b>, <b> amplitudes </ b>, <b> repeat </ b>. <br />
+        <h3> timings: </ h3> indicates the duration in the combination of timing and amplitude. It can only be an integer greater than or equal to 0. When it is 0, it will be ignored. The unit is milliseconds. Use commas to separate different values. For example: <br />
+        <i> 100,200,100 </ i> <br />
+        It means to run 100ms first, then 200ms, and finally 100ms. <br />
+        <h3> amplitudes (amplitudes): </ h3> indicates the amplitude in the combination of timing and amplitude, which affects the vibration intensity during vibration. The value ranges from an integer between 0 and 255. When 0, it means that the motor is turned off. Different numerical division. For example: <br />
+        <i> 255,0,255 </ i> <br />
+        It means run at 255 amplitude first, then stop, and finally run at 255 amplitude. <br />
+        <h3> repeat (repeat): </ h3> represents the position of the combination of repeating timing and amplitude. The range of values ​​is -1-the length of the above combination. When it is -1, it does not repeat. <br />
+        A complete example is as follows: <br />
+        timings: <i> 100,200,100 </ i> <br />
+        amplitudes: <i> 255,0,255 </ i> <br />
+        repeat: <i> 0 </ i> <br />
+        The above example shows: 0: vibrate for 100ms with 255 amplitude; 1: stop after 200ms; 2: vibrate again with 255 amplitude for 100ms. Then repeat the above combination starting from serial number 0. <br />
+        <b> Note: </ b>
+        1. Timing and amplitude must correspond to each other! <br />
+        2. Android 8.0 and below does not support amplitude control! (That is, the amplitude only supports 0 (starting the motor) and non-zero (stopping the motor)) <br />
+        ]]>
+    </string>
+    <string name="advanced_dialog_help_content_about">
+        <![CDATA[
+         In fact, the project had thoughts and started production as early as last year, but what was expected at the time was not a vibration test, but an attempt to play music through a vibration motor. Obviously, it failed, so there is this "buzz" test app. <br />
+         But maybe this is not a delusion, because the reason why I have this idea is entirely because my Samsung s10 supports setting different vibration modes, and different modes are different melodies! This at least shows that it can be achieved in principle. <br />
+         However, I thought hard for a long time, read a lot of information, looked at a lot of source code, and I couldn\'t find a solution. If a big guy happens to have a view on this, welcome to post and discuss with me: <a href="https://v2ex.com/t/645640"> Is it possible to achieve linear motor playback on Android phones at the software level music? </a> <br />
+         In addition, my other serious app is also welcome to try: <a href="https://www.coolapk.com/apk/153839"> VideoShotPro-more convenient video screenshot and line stitching </ a > <br />
+        ]]>
+    </string>
+	<string name="advanced_dialog_tab_summary">Introduction</string>
+	<string name="advanced_dialog_tab_usage">usage</string>
+	<string name="advanced_dialog_tab_about">About</string>
+	<string name="advanced_dialog_tab_update">Update</string>
+	<string name="advanced_menu_btn_diy_run">run</string>
+	<string name="advanced_menu_btn_diy_save">save</string>
+	<string name="advanced_menu_btn_diy_open">open</string>
+	<string name="advanced_menu_btn_diy_share">share</string>
+	<string name="advanced_menu_btn_diy_import">import</string>
+	<string name="advanced_action_run_background">Background vibration</string>
+	<string name="advanced_btn_pre_wait">Stay tuned</string>
+	<string name="advanced_edit_diy_tip_text_empty">Field can not be empty</string>
+	<string name="advanced_fab_help_title">Instructions for use</string>
+	<string name="advanced_fab_help_btn_close">Close</string>
+	<string name="advanced_diy_open_choise_title">Select a document</string>
+	<string name="advanced_diy_open_choise_btn_close">Close</string>
+	<string name="advanced_edit_diy_tip_number_error">Wrong number format</string>
+	<string name="advanced_diy_check_timings_less_zero">The timing could not be less than 0</string>
+	<string name="advanced_diy_check_amplitude_number_error">Amplitude range 0&#8211;255</string>
+	<string name="advanced_diy_check_amp_bigThan_tim">The number of amplitude is greater than the number of timing</string>
+	<string name="advanced_diy_check_tim_bigThan_amp">Sequence number greater than the number of amplitude</string>
+	<string name="advanced_diy_check_reapeat_outOfIndex">Repeat index out of sequence</string>
+	<string name="advanced_diy_check_repeat_wrong_index">Wrong index</string>
+	<string name="advanced_diy_save_fileName_title">Enter the file name</string>
+	<string name="advanced_diy_save_fileName_btn_sure">OK</string>
+	<string name="advanced_diy_save_fileName_isEmpty">File name can not be empty</string>
+	<string name="advanced_diy_save_success">Saved successfully</string>
+	<string name="advanced_diy_import_dialog_title">Input data</string>
+	<string name="advanced_diy_import_dialog_btn_sure">OK</string>
+	<string name="advanced_diy_import_text_isEmpty">Data can not be empty</string>
+	<string name="advanced_diy_import_fail">Import failed!</string>
+	<string name="main_text_click_start">Click to start vibration</string>
+	<string name="main_text_click_stop">Tap to stop vibrating</string>
+	<string name="main_text_slip_tip">Slide open the "More"</string>
+	<string name="main_action_run_background">Background process</string>
+
+
+    <string-array name="advanced_spinner_pre">
+        <item>Heartbeat</item>
+        <item>Drums</item>
+        <item>Rock</item>
+        <item>Coin</item>
+        <item>Stay tuned&#8230;</item>
+    </string-array>
+</resources>

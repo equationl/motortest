@@ -76,7 +76,7 @@ class MainDiyDialogItemAdapter(
 
     private var mItemClickListener: OnItemClickListener? = null
 
-    fun setOnPictureDeleteListener(listener: OnItemClickListener?) {
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
         mItemClickListener = listener
     }
 
