@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">MotorTest-马达测试</string>
     <string name="advanced_toast_notSupportVibrator">当前设备不支持！</string>
+    <string name="advanced_toast_systemCustomize_notSupportVlue">非法数值！</string>
     <string name="advanced_text_predefined">系统预设：</string>
+    <string name="advanced_edit_system_customize">请输入任意整数</string>
+    <string name="advanced_btn_system_customize_start">启动</string>
     <string name="advanced_text_click">单击</string>
     <string name="advanced_text_doubleClick">双击</string>
     <string name="advanced_text_heavyClick">重击</string>
@@ -37,7 +40,8 @@
         同上述步骤开启振动后，将手机侧面略微与桌面接触。如果能听到手机敲击桌子的声音，即为X轴线性马达；若无太大反应，则为Z轴线性马达。而对于Z轴线性马达，需要平放才会有敲击桌子的声音。<br />
         <h3>测试方法简介</h3>
         <h4>系统预设</h4>
-        在该组测试中，将会以安卓系统已经调教好的四种振动模式振动，是最基础的振动测试。需要注意的是，该组只支持安卓10以上设备。<br />
+        在该组测试中，将会以安卓系统已经调教好的四种振动模式振动，是最基础的振动测试。需要注意的是，该组只支持安卓10以上设备。
+        1.32以上版本支持自定义预设效果，对于不同品牌的手机可能会有不同的系统预设效果，需要自行输入数字尝试。根据 @紫红小番薯 使用小米10pro测试，数值 20 以后是一些“音乐”，43是 MIUI 的默认来电振动效果<br />
         <h4>程序预设</h4>
         在该组测试中，将会以本人调教好的多种振动模式进行测试，且振动模式还在不断增加中。<br />
         <h4>连续测试</h4>
@@ -76,13 +80,16 @@
         另外，我的另一款正经app也欢迎大家试用：<a href="https://www.coolapk.com/apk/153839">隐云图解制作-更方便的视频截图与台词拼接</a><br />
         ]]>
     </string>
-    <string name="advanced_dialog_help_content_update">
+    <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
+        <h3>1.32</h3>
+        *新增自定义系统预设（感谢 @紫红小番薯 的建议）<br />
+        *修复主页点击振动后滑动提示未隐藏的问题<br />
+
         <h3>1.31</h3>
         *新增预设：投币（数据来自 @fairyex）<br />
         *首页增加上滑提示<br />
         *支持英文<br />
-
 
         <h3>1.3</h3>
         *新增简单振动（默认主界面），上滑即可开启“更多”<br />
@@ -119,6 +126,7 @@
     <string name="advanced_menu_btn_diy_share">分享</string>
     <string name="advanced_menu_btn_diy_import">导入</string>
     <string name="advanced_action_run_background">后台振动</string>
+    <string name="advanced_action_customize_system_default">自定义系统预设</string>
     <string name="advanced_btn_pre_wait">敬请期待</string>
     <string name="advanced_edit_diy_tip_text_empty">字段不能为空</string>
     <string name="advanced_fab_help_title">使用说明</string>

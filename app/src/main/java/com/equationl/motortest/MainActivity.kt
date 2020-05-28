@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity() {
             slipUpScreen()
         }
 
+        main_text_slip_tip.setOnClickListener {
+            slipUpScreen()
+        }
+
         initAnimator()
         initGestureDetector()
     }
@@ -60,6 +64,7 @@ class MainActivity : AppCompatActivity() {
             isVibrated = true
             vibrator.vibrate(longArrayOf(0,10000), intArrayOf(0,255), 0)
             main_btn_advanced.visibility = View.GONE
+            main_text_slip_tip.visibility = View.GONE
             vibrationAnimator.start()
         }
     }
@@ -84,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         main_tip_text.text = getString(R.string.main_text_click_start)
         isVibrated = false
         main_btn_advanced.visibility = View.VISIBLE
+        main_text_slip_tip.visibility = View.VISIBLE
     }
 
     private fun initAnimator() {

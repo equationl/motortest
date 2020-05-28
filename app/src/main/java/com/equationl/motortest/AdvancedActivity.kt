@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.equationl.motortest.adapter.MainDiyDialogItemAdapter
 import com.equationl.motortest.database.DatabaseHelper
 import com.equationl.motortest.database.VibrationEffects
@@ -41,6 +42,7 @@ class AdvancedActivity : AppCompatActivity() {
     lateinit var vibrator: VibratorHelper
     private var isUseHighAccuracy: Boolean by Preference(this, "isUseHighAccuracy", false)
     private var isRunInBackground: Boolean by Preference(this, "isRunInBackground", false)
+    private var isUseCustomizeSystemDefault: Boolean by Preference(this, "isUseCustomizeSystemDefault", false)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +90,7 @@ class AdvancedActivity : AppCompatActivity() {
 
         menu.findItem(R.id.advanced_action_high_accuracy).isChecked = isUseHighAccuracy
         menu.findItem(R.id.advanced_action_run_background).isChecked = isRunInBackground
+        menu.findItem(R.id.advanced_action_customize_system_default).isChecked = isUseCustomizeSystemDefault
 
         return true
     }
@@ -125,8 +128,32 @@ class AdvancedActivity : AppCompatActivity() {
                     item.isChecked = isRunInBackground
                 }
             }
+            R.id.advanced_action_customize_system_default -> {
+                if (item.isChecked) {
+                    setSystemDefaultState(View.VISIBLE)
+                    isUseCustomizeSystemDefault = false
+                    item.isChecked = isUseCustomizeSystemDefault
+                }
+                else {
+                    setSystemDefaultState(View.GONE)
+                    isUseCustomizeSystemDefault = true
+                    item.isChecked = isUseCustomizeSystemDefault
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setSystemDefaultState(isVisibility: Int) {
+        main_layout_system_customize.visibility = if (isVisibility==View.GONE) View.VISIBLE else View.GONE
+        main_btn_system_customize_start.visibility = if (isVisibility==View.GONE) View.VISIBLE else View.GONE
+        main_button_click.visibility = isVisibility
+        main_button_double_click.visibility = isVisibility
+        main_button_heavy_click.visibility = isVisibility
+        main_button_tick.visibility = isVisibility
+        val appPredefinedParams = main_text_app_predefined.layoutParams as ConstraintLayout.LayoutParams
+        appPredefinedParams.topToBottom = if (isVisibility==View.GONE) main_layout_system_customize.id else main_button_click.id
+        main_text_app_predefined.requestLayout()
     }
 
     private fun checkDevice() {
@@ -144,6 +171,9 @@ class AdvancedActivity : AppCompatActivity() {
     }
 
     private fun initPreVibrator() {
+        if (isUseCustomizeSystemDefault) {
+            setSystemDefaultState(View.GONE)
+        }
         if (Build.VERSION.SDK_INT < 29) {
             main_text_predefined.text = getString(R.string.advanced_text_predefined_notSupport)
             main_text_predefined.setTextColor(Color.RED)
@@ -167,6 +197,13 @@ class AdvancedActivity : AppCompatActivity() {
 
             main_button_tick.setOnClickListener {
                 vibrator.vibratePredefined(VibrationEffect.EFFECT_TICK)
+            }
+            main_btn_system_customize_start.setOnClickListener {
+                try {
+                    vibrator.vibratePredefined(main_edit_system_customize.text.toString().toInt())
+                } catch (e: java.lang.IllegalArgumentException) {
+                    Toast.makeText(applicationContext, R.string.advanced_toast_systemCustomize_notSupportVlue, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
