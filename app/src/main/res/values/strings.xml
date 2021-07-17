@@ -82,6 +82,10 @@
     </string>
     <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
+        <h3>1.33</h3>
+        *新增自定义系统预设（感谢 @紫红小番薯 的建议）<br />
+        *修复主页点击振动后滑动提示未隐藏的问题<br />
+
         <h3>1.32</h3>
         *新增自定义系统预设（感谢 @紫红小番薯 的建议）<br />
         *修复主页点击振动后滑动提示未隐藏的问题<br />
@@ -124,6 +128,7 @@
     <string name="advanced_menu_btn_diy_save">保存</string>
     <string name="advanced_menu_btn_diy_open">打开</string>
     <string name="advanced_menu_btn_diy_share">分享</string>
+    <string name="advanced_menu_btn_diy_visualization">图形</string>
     <string name="advanced_menu_btn_diy_import">导入</string>
     <string name="advanced_action_run_background">后台振动</string>
     <string name="advanced_action_customize_system_default">自定义系统预设</string>
@@ -148,6 +153,12 @@
     <string name="advanced_diy_import_dialog_btn_sure">确定</string>
     <string name="advanced_diy_import_text_isEmpty">数据不能为空</string>
     <string name="advanced_diy_import_fail">导入失败！</string>
+
+    <string name="visualization_sideBar_text_strong">强</string>
+    <string name="visualization_sideBar_text_weak">弱</string>
+    <string name="visualization_btn_save">保存</string>
+    <string name="visualization_btn_back">返回</string>
+    <string name="visualization_text_time">00:00</string>
 
 
     <string name="main_text_click_start">点击以开始振动</string>

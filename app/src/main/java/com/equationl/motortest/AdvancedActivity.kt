@@ -48,11 +48,9 @@ class AdvancedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-            window.enterTransition = Explode()
-            window.exitTransition = Fade()
-        }
+        window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+        window.enterTransition = Explode()
+        window.exitTransition = Fade()
 
         setContentView(R.layout.activity_advanced)
         setSupportActionBar(advanced_toolbar)
@@ -364,6 +362,10 @@ class AdvancedActivity : AppCompatActivity() {
                     }
                     R.id.main_menu_btn_diy_import -> {
                         diyClickImport()
+                    }
+                    R.id.main_menu_btn_diy_visualization -> {
+                        //TODO
+                        startActivity(Intent().setClass(this, VisualizationActivity::class.java))
                     }
                 }
                 return@setOnMenuItemClickListener false

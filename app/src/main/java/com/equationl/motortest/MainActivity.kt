@@ -4,14 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorInflater
 import android.app.ActivityOptions
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Vibrator
 import android.view.GestureDetector
 import android.view.MotionEvent
-
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.equationl.motortest.util.VibratorHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -73,13 +71,8 @@ class MainActivity : AppCompatActivity() {
         if (!isVibrated) {
             val intent = Intent()
             intent.setClass(this, AdvancedActivity::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, main_btn_advanced,
-                    "shared element").toBundle())
-            }
-            else {
-                startActivity(intent)
-            }
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, main_btn_advanced,
+                "shared element").toBundle())
         }
     }
 
