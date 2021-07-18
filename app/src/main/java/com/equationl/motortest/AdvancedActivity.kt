@@ -1,5 +1,6 @@
 package com.equationl.motortest
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -34,6 +35,8 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val RequestVisualization = 100
+private const val TAG = "el, inAd"
 
 class AdvancedActivity : AppCompatActivity() {
     var amplitude = 255
@@ -140,6 +143,19 @@ class AdvancedActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "onActivityResult: result ok")
+            if (requestCode == RequestVisualization) {
+                Log.i(TAG, "onActivityResult: request == $RequestVisualization")
+                val timings = data?.getStringExtra("timings")
+                val amplitude = data?.getStringExtra("amplitude")
+                diyClickSave(true, timings, amplitude)
+            }
+        }
     }
 
     private fun setSystemDefaultState(isVisibility: Int) {
@@ -364,8 +380,7 @@ class AdvancedActivity : AppCompatActivity() {
                         diyClickImport()
                     }
                     R.id.main_menu_btn_diy_visualization -> {
-                        //TODO
-                        startActivity(Intent().setClass(this, VisualizationActivity::class.java))
+                        startActivityForResult(Intent().setClass(this, VisualizationActivity::class.java), RequestVisualization)
                     }
                 }
                 return@setOnMenuItemClickListener false
@@ -576,12 +591,29 @@ class AdvancedActivity : AppCompatActivity() {
         return listOf(timings, amplitude, repeateI.toString())
     }
 
-    private fun diyClickSave() {
-        val data = checkDiyData() ?: return
+    private fun diyClickSave(isFromVisualization: Boolean = false, timingsT: String? = "", amplitudeT: String? = "") {
+        val timings: String
+        val amplitude: String
+        val repeateI: String
+        if (isFromVisualization) {
+            if (timingsT == null || amplitudeT == null) {
+                Log.w(TAG, "diyClickSave: result data is null!")
+                return
+            }
+            timings = timingsT
+            amplitude = amplitudeT
+            repeateI = "-1"
+            main_edit_diy_timings.setText(timings)
+            main_edit_diy_amplitudes.setText(amplitude)
+            main_edit_diy_repeat.setText(repeateI)
+        }
+        else {
+            val data = checkDiyData() ?: return
 
-        val timings = data[0]
-        val amplitude = data[1]
-        val repeateI = data[2]
+            timings = data[0]
+            amplitude = data[1]
+            repeateI = data[2]
+        }
 
         val editText = EditText(applicationContext)
         MaterialAlertDialogBuilder(this)

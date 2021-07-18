@@ -131,4 +131,5 @@
 	<string name="visualization_btn_save">Save</string>
 	<string name="visualization_btn_back">Back</string>
 	<string name="visualization_text_time">00:00</string>
+	<string name="visualization_text_time_sec">%.3f s</string>
 </resources>

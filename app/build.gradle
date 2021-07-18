@@ -44,18 +44,20 @@ dependencies {
     //******用于兼容 m1 ，如果新版本支持 m1 后只需 *****
     //implementation "androidx.room:room-runtime:2.2.6"
     //kapt "androidx.room:room-compiler:2.2.6"
-    def room_version = "2.3.0"
-    implementation("androidx.room:room-runtime:$room_version") {
-        exclude(group:'org.xerial')
-    }
-    kapt("androidx.room:room-compiler:$room_version"){
-        exclude(group:'org.xerial')
-    }
-    implementation("androidx.room:room-ktx:$room_version"){
-        exclude(group:'org.xerial')
-    }
-    implementation 'org.xerial:sqlite-jdbc:3.34.0'
+    //def room_version = "2.3.0"
+    //implementation("androidx.room:room-runtime:$room_version") {
+    //    exclude(group:'org.xerial')
+    //}
+    //kapt("androidx.room:room-compiler:$room_version"){
+    //    exclude(group:'org.xerial')
+    //}
+    //implementation("androidx.room:room-ktx:$room_version"){
+    //    exclude(group:'org.xerial')
+    //}
+    //implementation 'org.xerial:sqlite-jdbc:3.34.0'
     //******end************
+    implementation "androidx.room:room-runtime:2.4.0-alpha03"
+    kapt "androidx.room:room-compiler:2.4.0-alpha03"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

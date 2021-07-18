@@ -70,6 +70,7 @@
         <b>注意：</b>
         1.时序和振幅必须一一对应！<br />
         2.安卓8.0以下不支持控制振幅！（即振幅只支持0（启动马达）和非0（停止马达））<br />
+        3.某些定制UI（例如MIUI），会禁止持续性的相同震动，如果是相同参数的震动，无论设置持续时间为多久，都只会持续3s左右，与本app无关。<br />
         ]]>
     </string>
     <string name="advanced_dialog_help_content_about">
@@ -83,8 +84,7 @@
     <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
         <h3>1.33</h3>
-        *新增自定义系统预设（感谢 @紫红小番薯 的建议）<br />
-        *修复主页点击振动后滑动提示未隐藏的问题<br />
+        *新增图形化创建震动序列（某些定制UI，例如MIUI，会禁止持续性的相同震动，如果是相同参数的震动，无论设置持续时间为多久，都只会持续3s左右，与本app无关。）<br />
 
         <h3>1.32</h3>
         *新增自定义系统预设（感谢 @紫红小番薯 的建议）<br />
@@ -159,6 +159,8 @@
     <string name="visualization_btn_save">保存</string>
     <string name="visualization_btn_back">返回</string>
     <string name="visualization_text_time">00:00</string>
+    <string name="visualization_text_time_sec">%.3f s</string>
+
 
 
     <string name="main_text_click_start">点击以开始振动</string>
