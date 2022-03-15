@@ -83,6 +83,10 @@
     </string>
     <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
+        <h3>1.34</h3>
+        *新增图形化创建震动序列支持添加无振动（振幅为 0）<br />
+        *优化图形化创建震动序列<br />
+
         <h3>1.33</h3>
         *新增图形化创建震动序列（某些定制UI，例如MIUI，会禁止持续性的相同震动，如果是相同参数的震动，无论设置持续时间为多久，都只会持续3s左右，与本app无关。）<br />
 
@@ -159,7 +163,9 @@
     <string name="visualization_btn_save">保存</string>
     <string name="visualization_btn_back">返回</string>
     <string name="visualization_text_time">00:00</string>
+    <string name="visualization_text_default_amplitude">0</string>
     <string name="visualization_text_time_sec">%.3f s</string>
+    <string name="visualization_text_amplitude">%1$d</string>
 
 
 

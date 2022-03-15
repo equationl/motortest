@@ -2,8 +2,6 @@ package com.equationl.motortest
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Vibrator
-import android.util.Log
 import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.equationl.motortest.util.VibratorHelper
@@ -43,7 +41,7 @@ class VisualizationActivity : AppCompatActivity() {
     }
     
     private fun initParameter() {
-        vibrator = VibratorHelper(getSystemService(VIBRATOR_SERVICE) as Vibrator)
+        vibrator = VibratorHelper(this)
     }
 
     private fun initListener() {
@@ -66,8 +64,11 @@ class VisualizationActivity : AppCompatActivity() {
         visualization_touchView.setOnTouchActionListener(object : MyTouchView.OnTouchActionListener {
             override fun onDown(motionEvent: MotionEvent) {
                 val amplitude = getAmplitude(motionEvent.y)
-                vibrator.vibrateOneShot(120000, amplitude)
+                vibrator.vibrateOneShot(120000, amplitude.coerceIn(1, 255))
                 startTime = timerText
+                runOnUiThread {
+                    visualization_text_amplitude.text = getString(R.string.visualization_text_amplitude, amplitude)
+                }
                 refreshTextTimer = fixedRateTimer(null, false, 0, 1) {
                     timerText++
                     runOnUiThread {
@@ -80,7 +81,7 @@ class VisualizationActivity : AppCompatActivity() {
                 val amplitude = getAmplitude(motionEvent.y)
                 recordTouch(amplitude)
                 startTime = timerText
-                vibrator.vibrateOneShot(120000, amplitude)
+                vibrator.vibrateOneShot(120000, amplitude.coerceIn(1, 255))
             }
 
             override fun onUp(motionEvent: MotionEvent) {
@@ -89,22 +90,29 @@ class VisualizationActivity : AppCompatActivity() {
                 startTime = timerText
                 vibrator.cancel()
                 refreshTextTimer.cancel()
-                Log.i(TAG, "onUp: \nt=$timingsText\na=$amplitudeText")
             }
 
         })
     }
 
     private fun getAmplitude(y: Float): Int {
-        val relativeScreenHeight = visualization_touchView.bottom - visualization_touchView.top
-        val touchY = y.coerceIn(visualization_touchView.top.toFloat(), visualization_touchView.bottom.toFloat())
+        val touchTop = visualization_touchView.top.toFloat() + 50
+        val touchBottom = visualization_touchView.bottom.toFloat() - 50
+        val relativeScreenHeight = touchBottom - touchTop
+        val touchY = y.coerceIn(
+            0f,
+            touchBottom
+        )
         val amplitude = 255 - touchY * 255 / relativeScreenHeight
-        return amplitude.coerceIn(1f, 255f).toInt()
+        return amplitude.coerceIn(0f, 255f).toInt()
     }
 
     private fun recordTouch(amplitude: Int) {
         val timings = timerText - startTime
         timingsText = "$timingsText, $timings"
         amplitudeText = "$amplitudeText, $amplitude"
+        runOnUiThread {
+            visualization_text_amplitude.text = getString(R.string.visualization_text_amplitude, amplitude)
+        }
     }
 }

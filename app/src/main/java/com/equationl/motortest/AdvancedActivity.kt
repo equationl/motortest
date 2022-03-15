@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
-import android.os.Vibrator
 import android.text.method.LinkMovementMethod
 import android.transition.Explode
 import android.transition.Fade
@@ -16,6 +15,8 @@ import android.view.*
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -39,14 +40,14 @@ private const val RequestVisualization = 100
 private const val TAG = "el, inAd"
 
 class AdvancedActivity : AppCompatActivity() {
-    var amplitude = 255
-    var rate = 50
+    private var amplitude = 255
+    private var rate = 50
     private var hasAmplitudeControl = true
-    lateinit var vibrator: VibratorHelper
+    private lateinit var vibrator: VibratorHelper
+    private lateinit var launcherVisualization: ActivityResultLauncher<Intent>
     private var isUseHighAccuracy: Boolean by Preference(this, "isUseHighAccuracy", false)
     private var isRunInBackground: Boolean by Preference(this, "isRunInBackground", false)
     private var isUseCustomizeSystemDefault: Boolean by Preference(this, "isUseCustomizeSystemDefault", false)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +60,12 @@ class AdvancedActivity : AppCompatActivity() {
         setSupportActionBar(advanced_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        vibrator = VibratorHelper(getSystemService(VIBRATOR_SERVICE) as Vibrator)
+        vibrator = VibratorHelper(this)
 
         checkDevice()
         initPreVibrator()
         initHighAccuracy()
+        initActivityResult()
         listenerSeekBar()
         listenerBtn()
 
@@ -145,14 +147,12 @@ class AdvancedActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            Log.i(TAG, "onActivityResult: result ok")
-            if (requestCode == RequestVisualization) {
+    private fun initActivityResult() {
+        launcherVisualization = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
                 Log.i(TAG, "onActivityResult: request == $RequestVisualization")
-                val timings = data?.getStringExtra("timings")
-                val amplitude = data?.getStringExtra("amplitude")
+                val timings = it.data?.getStringExtra("timings")
+                val amplitude = it.data?.getStringExtra("amplitude")
                 diyClickSave(true, timings, amplitude)
             }
         }
@@ -380,7 +380,7 @@ class AdvancedActivity : AppCompatActivity() {
                         diyClickImport()
                     }
                     R.id.main_menu_btn_diy_visualization -> {
-                        startActivityForResult(Intent().setClass(this, VisualizationActivity::class.java), RequestVisualization)
+                        launcherVisualization.launch(Intent(this, VisualizationActivity::class.java))
                     }
                 }
                 return@setOnMenuItemClickListener false

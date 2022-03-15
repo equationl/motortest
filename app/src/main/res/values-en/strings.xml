@@ -132,4 +132,6 @@
 	<string name="visualization_btn_back">Back</string>
 	<string name="visualization_text_time">00:00</string>
 	<string name="visualization_text_time_sec">%.3f s</string>
+	<string name="visualization_text_default_amplitude">0</string>
+	<string name="visualization_text_amplitude">%1$d</string>
 </resources>

@@ -4,12 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.25364583333333335" />
+        <entry key="..\:/Android-TEST/motortest/app/src/main/res/layout/activity_visualization.xml" value="0.36614583333333334" />
         <entry key="app/src/main/res/layout/activity_visualization.xml" value="0.21302083333333333" />
         <entry key="app/src/main/res/menu/menu_advanced_btn_diy.xml" value="0.22708333333333333" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

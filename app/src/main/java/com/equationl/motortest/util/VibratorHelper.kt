@@ -1,8 +1,12 @@
 package com.equationl.motortest.util
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * FileName: VibratorHelper.kt
@@ -11,7 +15,24 @@ import android.os.Vibrator
  * Date: 2020/3/1 18:30
  * Description: Vibrator帮助类，用于解决旧版本兼容问题
  */
-class VibratorHelper(private val vibrator: Vibrator) {
+class VibratorHelper {
+    private var vibrator: Vibrator
+
+
+    constructor(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            this.vibrator = vibratorManager.defaultVibrator
+        }
+        else {
+            @Suppress("DEPRECATION")
+            this.vibrator = context.getSystemService(AppCompatActivity.VIBRATOR_SERVICE) as Vibrator
+        }
+    }
+
+    constructor(vibrator: Vibrator) {
+        this.vibrator = vibrator
+    }
 
     fun cancel() {
         vibrator.cancel()
@@ -22,6 +43,7 @@ class VibratorHelper(private val vibrator: Vibrator) {
     }
 
     fun hasAmplitudeControl(): Boolean {
+        @SuppressLint("ObsoleteSdkInt")
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return false
         }
@@ -29,6 +51,7 @@ class VibratorHelper(private val vibrator: Vibrator) {
     }
 
     fun vibrate(timings: LongArray, amplitudes: IntArray, repeat: Int) {
+        @SuppressLint("ObsoleteSdkInt")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val vibrationEffect = VibrationEffect.createWaveform(timings, amplitudes, repeat)
             vibrator.vibrate(vibrationEffect)
@@ -56,6 +79,7 @@ class VibratorHelper(private val vibrator: Vibrator) {
     }
 
     fun vibrateOneShot(milliseconds: Long, amplitude: Int) {
+        @SuppressLint("ObsoleteSdkInt")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val vibrationEffect = VibrationEffect.createOneShot(milliseconds, amplitude)
             vibrator.vibrate(vibrationEffect)

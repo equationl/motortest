@@ -5,7 +5,6 @@ import android.animation.AnimatorInflater
 import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
-import android.os.Vibrator
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(main_toolbar)
 
-        vibrator = VibratorHelper(getSystemService(VIBRATOR_SERVICE) as Vibrator)
+        vibrator = VibratorHelper(this)
 
         main_btn_advanced.setOnClickListener {
             slipUpScreen()
