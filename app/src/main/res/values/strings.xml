@@ -4,6 +4,7 @@
     <string name="advanced_toast_systemCustomize_notSupportVlue">非法数值！</string>
     <string name="advanced_text_predefined">系统预设：</string>
     <string name="advanced_edit_system_customize">请输入任意整数</string>
+    <string name="advanced_edit_systemCustomize_clr_description">清除</string>
     <string name="advanced_btn_system_customize_start">启动</string>
     <string name="advanced_text_click">单击</string>
     <string name="advanced_text_doubleClick">双击</string>
@@ -138,6 +139,7 @@
     <string name="advanced_action_customize_system_default">自定义系统预设</string>
     <string name="advanced_btn_pre_wait">敬请期待</string>
     <string name="advanced_edit_diy_tip_text_empty">字段不能为空</string>
+    <string name="advanced_fab_description">帮助</string>
     <string name="advanced_fab_help_title">使用说明</string>
     <string name="advanced_fab_help_btn_close">关闭</string>
     <string name="advanced_diy_open_choise_title">选择文件</string>

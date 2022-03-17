@@ -29,7 +29,9 @@ fun MainScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), clickScreen: () -> 
                 MainTopBar()
             }
         ) {
-            MainContent(clickScreen, slipUpScreen)
+            Box(modifier = Modifier.padding(it)) {
+                MainContent(clickScreen, slipUpScreen)
+            }
         }
     }
 }
@@ -37,7 +39,11 @@ fun MainScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), clickScreen: () -> 
 @Composable
 fun MainTopBar() {
     TopAppBar {
-        Text(stringResource(R.string.app_name))
+        TopAppBar (
+            title = {
+                Text(stringResource(R.string.app_name))
+            }
+        )
     }
 }
 
