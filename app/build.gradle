@@ -10,10 +10,10 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.equationl.motortest"
-        minSdkVersion 26
+        minSdkVersion 25  // fixme for debug
         targetSdkVersion 31
         versionCode 8
-        versionName "1.34"
+        versionName "1.40"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,6 +40,11 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion '1.0.5'
     }
+}
+
+// 用于忽略使用 OptIn 注解的警告
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
 dependencies {

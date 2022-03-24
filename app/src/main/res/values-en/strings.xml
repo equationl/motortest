@@ -13,7 +13,7 @@
 	<string name="advanced_text_notSupport_amplitude">Set vibration intensity: The current device does not support this option</string>
 	<string name="advanced_menu_high_accuracy">High-precision</string>
 	<string name="advanced_text_pro">100</string>
-	<string name="advanced_text_rate">Vibration frequency</string>
+	<string name="advanced_text_rate">Vibration frequency:</string>
 	<string name="advanced_btn_free_start">Run</string>
 	<string name="advanced_btn_free_stop">Stop</string>
 	<string name="advanced_text_app_predefined">Pre-program:</string>
@@ -123,6 +123,7 @@
     </string-array>
     <string name="advanced_toast_systemCustomize_notSupportVlue">Illegal value!</string>
 	<string name="advanced_edit_system_customize">Please enter any integer</string>
+	<string name="advanced_edit_systemCustomize_clr_description">Clear</string>
 	<string name="advanced_btn_system_customize_start">Start</string>
 	<string name="advanced_action_customize_system_default">Custom system preset</string>
 	<string name="advanced_menu_btn_diy_visualization">Visualization</string>

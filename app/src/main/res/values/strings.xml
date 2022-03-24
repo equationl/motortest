@@ -16,7 +16,7 @@
     <string name="advanced_text_notSupport_amplitude">设置振动强度：当前设备不支持此选项</string>
     <string name="advanced_menu_high_accuracy">使用高精度</string>
     <string name="advanced_text_pro">100</string>
-    <string name="advanced_text_rate">震动频率</string>
+    <string name="advanced_text_rate">振动频率：</string>
     <string name="advanced_btn_free_start">启动</string>
     <string name="advanced_btn_free_stop">停止</string>
     <string name="advanced_text_app_predefined">程序预设：</string>
