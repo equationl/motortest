@@ -1,19 +1,29 @@
 package com.equationl.motortest.compose.ui
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.text.method.LinkMovementMethod
+import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,18 +33,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.equationl.motortest.R
+import com.equationl.motortest.VisualizationActivity
+import com.equationl.motortest.adapter.MainDiyDialogItemAdapter
+import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.compose.theme.DarkColors
+import com.equationl.motortest.compose.theme.ErrorTextSize
 import com.equationl.motortest.compose.theme.LightColors
 import com.equationl.motortest.constants.DataStoreKey
+import com.equationl.motortest.database.DatabaseHelper
+import com.equationl.motortest.database.VibrationEffects
 import com.equationl.motortest.settingDataStore
 import com.equationl.motortest.util.PredefinedEffect
 import com.equationl.motortest.util.Utils
@@ -47,25 +67,36 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 
-var usingCustomPredefined by mutableStateOf(false)
-var usingHighAccuracy by mutableStateOf(false)
-var runBackground by mutableStateOf(false)
-var appPreSelectIndex by mutableStateOf(0)
+private const val TAG = "AdvancedScreen"
 
-var amplitude = 255
-var rate = 50
+private var usingCustomPredefined by mutableStateOf(false)
+private var usingHighAccuracy by mutableStateOf(false)
+private var runBackground by mutableStateOf(false)
+private var appPreSelectIndex by mutableStateOf(0)
+
+private var amplitude = 255
+private var rate = 50
+
+private lateinit var viewMode: MyViewMode
 
 //TODO checkDevice()
 
+//TODO 将还在使用的 view 组件迁移到 compose （例如AlertDialog）
+
 @Composable
 fun AdvancedScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), onBack: () -> Unit) {
+    viewMode = viewModel()
     val context: Context = LocalContext.current
 
     LaunchedEffect(key1 = usingCustomPredefined, key2 = usingHighAccuracy, key3 = runBackground) {
         usingCustomPredefined = context.settingDataStore.data.map { it[DataStoreKey.usingCustomPredefined] ?: false }.first()
         usingHighAccuracy = context.settingDataStore.data.map { it[DataStoreKey.usingHighAccuracy] ?: false }.first()
         runBackground = context.settingDataStore.data.map { it[DataStoreKey.runBackground] ?: false }.first()
+        viewMode.isRunOnBackground = runBackground
     }
 
     MaterialTheme(
@@ -121,7 +152,10 @@ fun ContentSystemPredefined() {
             ) {
                 OutlinedTextField(
                     value = inputText,
-                    onValueChange = { inputText = it },
+                    onValueChange = {
+                        if (it.isDigitsOnly()) {
+                            inputText = it
+                        } },
                     label = { Text(stringResource(R.string.advanced_edit_system_customize)) },
                     trailingIcon = {
                         if (inputText.isNotEmpty()) {
@@ -132,6 +166,8 @@ fun ContentSystemPredefined() {
                             }
                         }
                     },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.padding(start = 8.dp)
                 )
 
@@ -309,11 +345,18 @@ fun ContentFreeTest() {
 
 @Composable
 fun ContentDiy() {
+    val context: Context = LocalContext.current
+    var showMoreMenu by remember { mutableStateOf(false) }
+    val launcherVisualization = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val timings = it.data?.getStringExtra("timings")
+            val amplitude = it.data?.getStringExtra("amplitude")
+            diyClickSave(context, true, timings, amplitude)
+        }
+    }
+
     Column(modifier = Modifier.padding(start = 8.dp, top = 16.dp)) {
         Text(stringResource(R.string.advanced_text_diy))
-        var timingsText by remember { mutableStateOf("") }
-        var amplitudesText by remember { mutableStateOf("") }
-        var repeatText by remember { mutableStateOf("") }
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -321,22 +364,34 @@ fun ContentDiy() {
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = timingsText,
-                onValueChange = { timingsText = it },
+                value = viewMode.timingsText,
+                onValueChange = { viewMode.timingsText = it },
                 label = { Text(stringResource(R.string.advanced_edit_diy_timings)) },
                 trailingIcon = {
-                    if (timingsText.isNotEmpty()) {
-                        IconButton(onClick = { timingsText = "" }) {
+                    if (viewMode.timingsText.isNotEmpty()) {
+                        IconButton(onClick = { viewMode.timingsText = "" }) {
                             Icon(painter = painterResource(android.R.drawable.ic_menu_close_clear_cancel),
                                 contentDescription = stringResource(R.string.advanced_edit_systemCustomize_clr_description)
                             )
                         }
                     }
                 },
+                isError = viewMode.timingsOnError,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 8.dp)
+                    .onFocusChanged {
+                        if (it.hasFocus) {
+                            viewMode.setTimingsError("")
+                        } /*else if (timingsText.isBlank()) {
+                            viewMode.setTimingsError(context.getString(R.string.advanced_edit_diy_tip_text_empty))
+                        }*/
+                    }
             )
+        }
+
+        if (viewMode.timingsOnError) {
+            Text(viewMode.timingsErrorText, color = Color.Red, fontSize = ErrorTextSize)
         }
 
         Row(
@@ -345,22 +400,34 @@ fun ContentDiy() {
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = amplitudesText,
-                onValueChange = { amplitudesText = it },
+                value = viewMode.amplitudesText,
+                onValueChange = { viewMode.amplitudesText = it },
                 label = { Text(stringResource(R.string.advanced_edit_diy_amplitudes)) },
                 trailingIcon = {
-                    if (amplitudesText.isNotEmpty()) {
-                        IconButton(onClick = { timingsText = "" }) {
+                    if (viewMode.amplitudesText.isNotEmpty()) {
+                        IconButton(onClick = { viewMode.amplitudesText = "" }) {
                             Icon(painter = painterResource(android.R.drawable.ic_menu_close_clear_cancel),
                                 contentDescription = stringResource(R.string.advanced_edit_systemCustomize_clr_description)
                             )
                         }
                     }
                 },
+                isError = viewMode.amplitudesOnError,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 8.dp)
+                    .onFocusChanged {
+                        if (it.hasFocus) {
+                            viewMode.setAmplitudesError("")
+                        } /*else if (timingsText.isBlank()) {
+                            viewMode.setAmplitudesError(context.getString(R.string.advanced_edit_diy_tip_text_empty))
+                        }*/
+                    }
             )
+        }
+
+        if (viewMode.amplitudesOnError) {
+            Text(viewMode.amplitudesErrorText, color = Color.Red, fontSize = ErrorTextSize)
         }
 
         Row(
@@ -369,22 +436,34 @@ fun ContentDiy() {
             modifier = Modifier.fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = repeatText,
-                onValueChange = { repeatText = it },
+                value = viewMode.repeatText,
+                onValueChange = { viewMode.repeatText = it },
                 label = { Text(stringResource(R.string.advanced_edit_diy_repeat)) },
                 trailingIcon = {
-                    if (repeatText.isNotEmpty()) {
-                        IconButton(onClick = { repeatText = "" }) {
+                    if (viewMode.repeatText.isNotEmpty()) {
+                        IconButton(onClick = { viewMode.repeatText = "" }) {
                             Icon(painter = painterResource(android.R.drawable.ic_menu_close_clear_cancel),
                                 contentDescription = stringResource(R.string.advanced_edit_systemCustomize_clr_description)
                             )
                         }
                     }
                 },
+                isError = viewMode.repeatOnError,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(end = 8.dp)
+                    .onFocusChanged {
+                        if (it.hasFocus) {
+                            viewMode.setRepeatError("")
+                        } /*else if (timingsText.isBlank()) {
+                            viewMode.setRepeatError(context.getString(R.string.advanced_edit_diy_tip_text_empty))
+                        }*/
+                    }
             )
+        }
+
+        if (viewMode.repeatOnError) {
+            Text(viewMode.repeatErrorText, color = Color.Red, fontSize = ErrorTextSize)
         }
 
         Row(
@@ -395,14 +474,12 @@ fun ContentDiy() {
                 .padding(top = 16.dp)
         ) {
             Button(onClick = {
-                Log.i("test", "ContentDiy: 点击按钮")
-                //TODO
+                clickDiyStart(context)
             }) {
                 Text(
                     stringResource(R.string.advanced_btn_diy_start),
                     modifier = Modifier.clickable {
-                        //TODO
-                        Log.i("test", "ContentDiy: 点击文字")
+                        clickDiyStart(context)
                     }
                 )
                 Icon(
@@ -411,13 +488,20 @@ fun ContentDiy() {
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .clickable {
-                            //TODO
-                            Log.i("test", "ContentDiy: 点击图标")
+                            showMoreMenu = true
                         }
                 )
             }
 
-            OutlinedButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(start = 8.dp)) {
+            if (showMoreMenu) {
+                DiyMoreDropMenu(stringArrayResource(R.array.advanced_diy_more_menu), {showMoreMenu = false}) { index, _ ->
+                    onDiyMoreSelected(context, index, launcherVisualization)
+                }
+            }
+
+            OutlinedButton(onClick = {
+                VibratorHelper.instance.cancel()
+            }, modifier = Modifier.padding(start = 8.dp)) {
                 Text(stringResource(R.string.advanced_btn_diy_stop))
             }
         }
@@ -437,7 +521,7 @@ fun AppPreDropMenu() {
             expanded = !expanded
         }
     ) {
-        OutlinedTextField( // TODO 更改样式
+        OutlinedTextField(
             readOnly = true,
             value = selectedOptionText,
             onValueChange = { selectedOptionText = it },
@@ -446,7 +530,10 @@ fun AppPreDropMenu() {
                     expanded = expanded
                 )
             },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
+            colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent
+            )
         )
         ExposedDropdownMenu(
             expanded = expanded,
@@ -460,7 +547,6 @@ fun AppPreDropMenu() {
                         selectedOptionText = selectionOption
                         expanded = false
                         appPreSelectIndex = index
-                        /*TODO 更改预设模式*/
                     },
                     enabled = options.lastIndex != index
                 ) {
@@ -545,6 +631,7 @@ private fun TopBarDropdownMenu() {
                 text = stringResource(R.string.advanced_action_run_background),
                 defaultCheckState = runBackground) {
                 runBackground = it
+                viewMode.isRunOnBackground = it
                 CoroutineScope(Dispatchers.IO).launch {
                     context.settingDataStore.edit { setting ->
                         setting[DataStoreKey.runBackground] = it
@@ -624,6 +711,296 @@ private fun clickHelpBtn(context: Context) {
 
         override fun onTabUnselected(tab: TabLayout.Tab?) {}
     })
+}
+
+@Composable
+fun DiyMoreDropMenu(
+    menuItems: Array<String>,
+    onDismiss: () -> Unit,
+    onClickCallback: (index: Int, item: String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(true) }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = {
+            expanded = false
+            onDismiss.invoke() },
+    ) {
+        menuItems.forEachIndexed { index, item ->
+            DropdownMenuItem(onClick = {
+                onClickCallback.invoke(index, item)
+                expanded = false
+                onDismiss.invoke()
+            }) {
+                Text(text = item)
+            }
+        }
+    }
+}
+
+private fun diyClickOpen(context: Context) {
+    var alertDialog: AlertDialog? = null
+    val databaseHelper = DatabaseHelper.getInstance(context)
+    val list = databaseHelper.getAll()
+    val nameItems = mutableListOf<String>()
+    val dateItems = mutableListOf<String>()
+    for (i in list.indices) {
+        nameItems.add(list[i].name)
+        dateItems.add(SimpleDateFormat("yyy-MM-dd HH:mm:ss", Locale.CHINA).format(list[i].createTime))
+    }
+
+    val mainDiyDialogItemAdapter = MainDiyDialogItemAdapter(nameItems, dateItems, context)
+    mainDiyDialogItemAdapter.setOnItemClickListener(object: MainDiyDialogItemAdapter.OnItemClickListener {
+        override fun onClickDelete(position: Int) {
+            databaseHelper.delete(list[position])
+            nameItems.removeAt(position)
+            dateItems.removeAt(position)
+            mainDiyDialogItemAdapter.notifyDataSetChanged()
+        }
+
+        override fun onClickItem(position: Int) {
+            if (alertDialog != null) {
+                if (alertDialog!!.isShowing) {
+                    alertDialog!!.dismiss()
+                }
+            }
+            viewMode.timingsText = list[position].timings
+            viewMode.amplitudesText = list[position].amplitude
+            viewMode.repeatText = list[position].repeate.toString()
+        }
+    })
+
+    alertDialog = MaterialAlertDialogBuilder(context)
+        .setTitle(context.getString(R.string.advanced_diy_open_choise_title))
+        .setPositiveButton(context.getString(R.string.advanced_diy_open_choise_btn_close), null)
+        .setAdapter(mainDiyDialogItemAdapter, null)
+        .show()
+}
+
+private fun clickDiyStart(context: Context) {
+    viewMode.clearDiyInputError()
+
+    val data = checkDiyData(context) ?: return
+    val timing = data[0]
+    val amplitude = data[1]
+    val repeateI = data[2]
+
+    val timingsL = timing.split(",").map { it.toLong() }.toLongArray()
+    val amplitudeI = amplitude.split(",").map { it.toInt() }.toIntArray()
+
+    try {
+        VibratorHelper.instance.vibrate(timingsL, amplitudeI, Integer.parseInt(repeateI))
+    } catch (e: IllegalArgumentException) {
+        Log.e(TAG, "error in try create vibrationEffect", e)
+        viewMode.repeatOnError = true
+        viewMode.repeatErrorText = context.getString(R.string.advanced_diy_start_fail, e.message)
+        return
+    }
+}
+
+private fun checkDiyData(context: Context): List<String>? {
+    val timings = viewMode.timingsText
+    val amplitudes = viewMode.amplitudesText
+    val repeat = viewMode.repeatText
+
+    if (timings.isBlank()) {
+        viewMode.timingsOnError = true
+        viewMode.timingsErrorText = context.getString(R.string.advanced_edit_diy_tip_text_empty)
+        return null
+    }
+
+    if (amplitudes.isBlank()) {
+        viewMode.amplitudesOnError = true
+        viewMode.amplitudesErrorText = context.getString(R.string.advanced_edit_diy_tip_text_empty)
+        return null
+    }
+    if (repeat.isBlank()) {
+        viewMode.repeatOnError = true
+        viewMode.repeatErrorText = context.getString(R.string.advanced_edit_diy_tip_text_empty)
+        return null
+    }
+
+    val timing = timings
+        .replace(" ".toRegex(), "")
+        .replace("\n".toRegex(), "")
+    val timingsT = timing.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+    val amplitude = amplitudes
+        .replace(" ".toRegex(), "")
+        .replace("\n".toRegex(), "")
+    val amplitudeT = amplitude.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+
+    val repeateI: Int
+    try {
+        repeateI = repeat.toInt()
+    } catch (e: NumberFormatException) {
+        viewMode.repeatOnError = true
+        viewMode.repeatErrorText = context.getString(R.string.advanced_edit_diy_tip_number_error)
+        return null
+    }
+
+    for (dataT in timingsT) {
+        val data: Long
+        try {
+            data =dataT.toLong()
+        } catch (e: NumberFormatException) {
+            viewMode.timingsOnError = true
+            viewMode.timingsErrorText = context.getString(R.string.advanced_edit_diy_tip_number_error)
+            return null
+        }
+        if (data < 0) {
+            viewMode.timingsOnError = true
+            viewMode.timingsErrorText = context.getString(R.string.advanced_diy_check_timings_less_zero)
+            return null
+        }
+    }
+
+    for (dataT in amplitudeT) {
+        val data: Int
+        try {
+            data =dataT.toInt()
+        } catch (e: NumberFormatException) {
+            viewMode.setAmplitudesError(context.getString(R.string.advanced_edit_diy_tip_number_error))
+            return null
+        }
+        if (data < 0 || data > 255) {
+            viewMode.setAmplitudesError(context.getString(R.string.advanced_diy_check_amplitude_number_error))
+            return null
+        }
+    }
+
+    if (amplitudeT.size != timingsT.size) {
+        return if (amplitudeT.size > timingsT.size) {
+            viewMode.setAmplitudesError(context.getString(R.string.advanced_diy_check_amp_bigThan_tim))
+            null
+        } else {
+            viewMode.setTimingsError(context.getString(R.string.advanced_diy_check_tim_bigThan_amp))
+            null
+        }
+    }
+
+    if (repeateI >= amplitudeT.size) {
+        viewMode.setRepeatError(context.getString(R.string.advanced_diy_check_reapeat_outOfIndex))
+        return null
+    }
+    if (repeateI < -1) {
+        viewMode.setRepeatError(context.getString(R.string.advanced_diy_check_repeat_wrong_index))
+        return null
+    }
+
+    return listOf(timing, amplitude, repeateI.toString())
+}
+
+private fun diyClickSave(context: Context, isFromVisualization: Boolean = false, timingsT: String? = "", amplitudeT: String? = "") {
+    val timings: String
+    val amplitude: String
+    val repeateI: String
+    if (isFromVisualization) {
+        if (timingsT == null || amplitudeT == null) {
+            Log.w(TAG, "diyClickSave: result data is null!")
+            return
+        }
+        timings = timingsT
+        amplitude = amplitudeT
+        repeateI = "-1"
+        viewMode.timingsText = timings
+        viewMode.amplitudesText = amplitude
+        viewMode.repeatText = repeateI
+    }
+    else {
+        val data = checkDiyData(context) ?: return
+
+        timings = data[0]
+        amplitude = data[1]
+        repeateI = data[2]
+    }
+
+    val editText = EditText(context)
+    MaterialAlertDialogBuilder(context)
+        .setTitle(context.getString(R.string.advanced_diy_save_fileName_title))
+        .setView(editText)
+        .setPositiveButton(context.getString(R.string.advanced_diy_save_fileName_btn_sure)) { _, _ ->
+            val text = editText.text.toString()
+            if (text == "") {
+                Toast.makeText(context, context.getString(R.string.advanced_diy_save_fileName_isEmpty),Toast.LENGTH_LONG).show()
+            }
+            else {
+                val databaseHelper = DatabaseHelper.getInstance(context)
+                databaseHelper.insert(VibrationEffects(null, timings, amplitude, Integer.parseInt(repeateI), text, System.currentTimeMillis()))
+                Toast.makeText(context, context.getString(R.string.advanced_diy_save_success),Toast.LENGTH_LONG).show()
+            }
+        }
+        .show()
+}
+
+private fun diyClickShare(context: Context) {
+    val data = checkDiyData(context) ?: return
+
+    val timings = data[0]
+    val amplitude = data[1]
+    val repeateI = data[2]
+
+    var text = "{\"timings\": \"$timings\",\"amplitude\": \"$amplitude\",\"repeate\": \"$repeateI\"}"
+    text = Base64.encodeToString(text.toByteArray(), Base64.DEFAULT)
+
+    val intent = Intent()
+    intent.action = Intent.ACTION_SEND
+    intent.putExtra(Intent.EXTRA_TEXT, text)
+    intent.type = "text/plain"
+    context.startActivity(Intent.createChooser(intent, context.getText(R.string.app_name)))
+}
+
+private fun diyClickImport(context: Context) {
+    val editText = EditText(context)
+    MaterialAlertDialogBuilder(context)
+        .setTitle(context.getString(R.string.advanced_diy_import_dialog_title))
+        .setView(editText)
+        .setPositiveButton(context.getString(R.string.advanced_diy_import_dialog_btn_sure)) { _, _ ->
+            var text = editText.text.toString()
+            if (text == "") {
+                Toast.makeText(context, context.getString(R.string.advanced_diy_import_text_isEmpty),Toast.LENGTH_LONG).show()
+            }
+            else {
+                try {
+                    text = String(Base64.decode(text, Base64.DEFAULT))
+                    val array = JSONObject(text)
+                    val timings = array.getString("timings")
+                    val amplitude = array.getString("amplitude")
+                    val repeate = array.getString("repeate")
+                    viewMode.timingsText = timings
+                    viewMode.amplitudesText = amplitude
+                    viewMode.repeatText = repeate
+                }
+                catch (e: Exception) {
+                    Log.e("el", "import fail:", e)
+                    Toast.makeText(context, context.getString(R.string.advanced_diy_import_fail),Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        .show()
+}
+
+private fun onDiyMoreSelected(
+    context: Context,
+    index: Int,
+    launcherVisualization: ManagedActivityResultLauncher<Intent, ActivityResult>
+) {
+    when (index) {
+        0 -> {
+            launcherVisualization.launch(Intent(context, VisualizationActivity::class.java))
+        }
+        1 -> {
+            diyClickSave(context)
+        }
+        2 -> {
+            diyClickOpen(context)
+        }
+        3 -> {
+            diyClickImport(context)
+        }
+        4 -> {
+            diyClickShare(context)
+        }
+    }
 }
 
 

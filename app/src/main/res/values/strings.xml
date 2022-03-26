@@ -159,6 +159,7 @@
     <string name="advanced_diy_import_dialog_btn_sure">确定</string>
     <string name="advanced_diy_import_text_isEmpty">数据不能为空</string>
     <string name="advanced_diy_import_fail">导入失败！</string>
+    <string name="advanced_diy_start_fail">创建振动失败：%1$s</string>
 
     <string name="visualization_sideBar_text_strong">强</string>
     <string name="visualization_sideBar_text_weak">弱</string>
@@ -183,5 +184,13 @@
         <item>摇滚</item>
         <item>投币</item>
         <item>敬请期待&#8230;</item>
+    </string-array>
+
+    <string-array name="advanced_diy_more_menu">
+        <item>图形</item>
+        <item>保存</item>
+        <item>打开</item>
+        <item>导入</item>
+        <item>分享</item>
     </string-array>
 </resources>

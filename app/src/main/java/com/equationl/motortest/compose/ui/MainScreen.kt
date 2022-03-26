@@ -1,5 +1,6 @@
 package com.equationl.motortest.compose.ui
 
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
@@ -18,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.equationl.motortest.R
 import com.equationl.motortest.compose.theme.*
+
+private const val TAG = "MainScreen"
 
 @Composable
 fun MainScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), clickScreen: () -> Boolean, slipUpScreen: () -> Unit) {
@@ -60,8 +63,10 @@ fun MainContent(clickScreen: () -> Boolean, slipUpScreen: () -> Unit) {
             .scrollable(
                 orientation = Orientation.Vertical,
                 state = rememberScrollableState { delta ->
+                    Log.i(TAG, "MainContent: delta=$delta")
                     offset += delta
-                    if (delta < -100) {
+                    Log.i(TAG, "MainContent: offset=$offset")
+                    if (offset < -100) {
                         slipUpScreen.invoke()
                     }
                     delta

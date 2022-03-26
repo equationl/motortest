@@ -3,15 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/compose-model-1648300418617.xml" value="0.10117056856187291" />
+        <entry key="../../../../layout/compose-model-1648301302157.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1648302342852.xml" value="0.2048141891891892" />
+        <entry key="../../../../layout/compose-model-1648302613259.xml" value="0.20565878378378377" />
         <entry key="../../../../layout/custom_preview.xml" value="0.25364583333333335" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/layout-v21/activity_main.xml" value="0.24365942028985507" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/layout/activity_advanced.xml" value="0.36614583333333334" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/layout/activity_main.xml" value="0.24365942028985507" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/layout/activity_visualization.xml" value="0.36614583333333334" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/layout/content_advanced.xml" value="0.33" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/menu/menu_advanced.xml" value="0.36614583333333334" />
-        <entry key="..\:/Android-TEST/motortest/app/src/main/res/menu/menu_main.xml" value="0.36614583333333334" />
         <entry key="app/src/main/res/layout/activity_visualization.xml" value="0.21302083333333333" />
+        <entry key="app/src/main/res/layout/content_advanced.xml" value="0.29021228292713985" />
         <entry key="app/src/main/res/menu/menu_advanced_btn_diy.xml" value="0.22708333333333333" />
       </map>
     </option>

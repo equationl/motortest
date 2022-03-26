@@ -48,7 +48,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        cancelVibrate()
+
+        if (viewModel.currentPage == 0) {
+            cancelVibrate()
+        }
+        else if (!viewModel.isRunOnBackground) {
+            cancelVibrate()
+        }
     }
 
     override fun onBackPressed() {
