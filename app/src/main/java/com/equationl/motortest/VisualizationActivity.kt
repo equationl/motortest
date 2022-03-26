@@ -14,7 +14,6 @@ private const val TAG = "el, in Visualization"
 
 
 class VisualizationActivity : AppCompatActivity() {
-    lateinit var vibrator: VibratorHelper
     lateinit var refreshTextTimer: Timer
     var timerText = 0
     var startTime = 0
@@ -32,26 +31,26 @@ class VisualizationActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        vibrator.cancel()
+         VibratorHelper.instance.cancel()
     }
 
     override fun onPause() {
         super.onPause()
-        vibrator.cancel()
+         VibratorHelper.instance.cancel()
     }
     
     private fun initParameter() {
-        vibrator = VibratorHelper(this)
+         VibratorHelper.instance.init(this)
     }
 
     private fun initListener() {
         visualization_btn_back.setOnClickListener {
-            vibrator.cancel()
+             VibratorHelper.instance.cancel()
             finish()
         }
 
         visualization_btn_save.setOnClickListener {
-            vibrator.cancel()
+             VibratorHelper.instance.cancel()
             val intent = Intent()
             intent.putExtra("timings", timingsText)
             intent.putExtra("amplitude", amplitudeText)
@@ -64,7 +63,7 @@ class VisualizationActivity : AppCompatActivity() {
         visualization_touchView.setOnTouchActionListener(object : MyTouchView.OnTouchActionListener {
             override fun onDown(motionEvent: MotionEvent) {
                 val amplitude = getAmplitude(motionEvent.y)
-                vibrator.vibrateOneShot(120000, amplitude.coerceIn(1, 255))
+                 VibratorHelper.instance.vibrateOneShot(120000, amplitude.coerceIn(1, 255))
                 startTime = timerText
                 runOnUiThread {
                     visualization_text_amplitude.text = getString(R.string.visualization_text_amplitude, amplitude)
@@ -81,14 +80,14 @@ class VisualizationActivity : AppCompatActivity() {
                 val amplitude = getAmplitude(motionEvent.y)
                 recordTouch(amplitude)
                 startTime = timerText
-                vibrator.vibrateOneShot(120000, amplitude.coerceIn(1, 255))
+                 VibratorHelper.instance.vibrateOneShot(120000, amplitude.coerceIn(1, 255))
             }
 
             override fun onUp(motionEvent: MotionEvent) {
                 val amplitude = getAmplitude(motionEvent.y)
                 recordTouch(amplitude)
                 startTime = timerText
-                vibrator.cancel()
+                 VibratorHelper.instance.cancel()
                 refreshTextTimer.cancel()
             }
 

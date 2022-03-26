@@ -16,10 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
  * Description: Vibrator帮助类，用于解决旧版本兼容问题
  */
 class VibratorHelper {
-    private var vibrator: Vibrator
+    private lateinit var vibrator: Vibrator
 
-
-    constructor(context: Context) {
+    fun init(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             this.vibrator = vibratorManager.defaultVibrator
@@ -30,8 +29,14 @@ class VibratorHelper {
         }
     }
 
-    constructor(vibrator: Vibrator) {
+    fun init(vibrator: Vibrator) {
         this.vibrator = vibrator
+    }
+
+    companion object {
+        val instance by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            VibratorHelper()
+        }
     }
 
     fun cancel() {

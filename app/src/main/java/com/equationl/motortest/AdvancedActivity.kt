@@ -43,7 +43,6 @@ class AdvancedActivity : AppCompatActivity() {
     private var amplitude = 255
     private var rate = 50
     private var hasAmplitudeControl = true
-    private lateinit var vibrator: VibratorHelper
     private lateinit var launcherVisualization: ActivityResultLauncher<Intent>
     private var isUseHighAccuracy: Boolean by Preference(this, "isUseHighAccuracy", false)
     private var isRunInBackground: Boolean by Preference(this, "isRunInBackground", false)
@@ -60,7 +59,7 @@ class AdvancedActivity : AppCompatActivity() {
         setSupportActionBar(advanced_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        vibrator = VibratorHelper(this)
+        VibratorHelper.instance.init(this)
 
         checkDevice()
         initPreVibrator()
@@ -76,14 +75,14 @@ class AdvancedActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        vibrator.cancel()
+         VibratorHelper.instance.cancel()
     }
 
     override fun onPause() {
         super.onPause()
 
         if (!isRunInBackground) {
-            vibrator.cancel()
+             VibratorHelper.instance.cancel()
         }
     }
 
@@ -171,13 +170,13 @@ class AdvancedActivity : AppCompatActivity() {
     }
 
     private fun checkDevice() {
-        val hasVibrator = vibrator.hasVibrator()
+        val hasVibrator =  VibratorHelper.instance.hasVibrator()
         if (!hasVibrator) {
             Toast.makeText(applicationContext, R.string.advanced_toast_notSupportVibrator, Toast.LENGTH_LONG).show()
             finish()
         }
 
-        if (!vibrator.hasAmplitudeControl()) {
+        if (! VibratorHelper.instance.hasAmplitudeControl()) {
             hasAmplitudeControl = false
             main_text_amplitude.text = getString(R.string.advanced_text_notSupport_amplitude)
             main_text_amplitude.setTextColor(Color.RED)
@@ -198,23 +197,23 @@ class AdvancedActivity : AppCompatActivity() {
         }
         else {
             main_button_click.setOnClickListener {
-                vibrator.vibratePredefined(VibrationEffect.EFFECT_CLICK)
+                 VibratorHelper.instance.vibratePredefined(VibrationEffect.EFFECT_CLICK)
             }
 
             main_button_double_click.setOnClickListener {
-                vibrator.vibratePredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
+                 VibratorHelper.instance.vibratePredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
             }
 
             main_button_heavy_click.setOnClickListener {
-                vibrator.vibratePredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
+                 VibratorHelper.instance.vibratePredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
             }
 
             main_button_tick.setOnClickListener {
-                vibrator.vibratePredefined(VibrationEffect.EFFECT_TICK)
+                 VibratorHelper.instance.vibratePredefined(VibrationEffect.EFFECT_TICK)
             }
             main_btn_system_customize_start.setOnClickListener {
                 try {
-                    vibrator.vibratePredefined(main_edit_system_customize.text.toString().toInt())
+                     VibratorHelper.instance.vibratePredefined(main_edit_system_customize.text.toString().toInt())
                 } catch (e: java.lang.IllegalArgumentException) {
                     Toast.makeText(applicationContext, R.string.advanced_toast_systemCustomize_notSupportVlue, Toast.LENGTH_SHORT).show()
                 }
@@ -244,7 +243,7 @@ class AdvancedActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 main_pro_text.text = progress.toString()
                 amplitude = if (progress!=0) progress else 1
-                vibrator.vibrateOneShot(1, amplitude)
+                 VibratorHelper.instance.vibrateOneShot(1, amplitude)
             }
         })
 
@@ -261,7 +260,7 @@ class AdvancedActivity : AppCompatActivity() {
                 val progressl = progress * 10
                 main_pro_text.text = progressl.toString()
                 amplitude = if (progress!=0) progress*10 else 10
-                vibrator.vibrateOneShot(10, amplitude)
+                 VibratorHelper.instance.vibrateOneShot(10, amplitude)
             }
         })
 
@@ -276,7 +275,7 @@ class AdvancedActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 rate = progress
-                vibrator.vibrateOneShot(1, amplitude)
+                 VibratorHelper.instance.vibrateOneShot(1, amplitude)
             }
         })
 
@@ -291,14 +290,14 @@ class AdvancedActivity : AppCompatActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 rate = progress*10
-                vibrator.vibrateOneShot(10, amplitude)
+                 VibratorHelper.instance.vibrateOneShot(10, amplitude)
             }
         })
     }
 
     private fun listenerBtn() {
         main_btn_free_stop.setOnClickListener {
-            vibrator.cancel()
+             VibratorHelper.instance.cancel()
         }
 
         main_btn_free_start.setOnClickListener {
@@ -310,7 +309,7 @@ class AdvancedActivity : AppCompatActivity() {
                 timings[1] = 3_600_000
             }
             val amplitudes = intArrayOf(amplitude, 0)
-            vibrator.vibrate(timings, amplitudes, 0)
+             VibratorHelper.instance.vibrate(timings, amplitudes, 0)
         }
 
         main_btn_pre_start.setOnClickListener {
@@ -324,11 +323,11 @@ class AdvancedActivity : AppCompatActivity() {
         }
 
         main_btn_pre_stop.setOnClickListener {
-            vibrator.cancel()
+             VibratorHelper.instance.cancel()
         }
 
         main_btn_diy_stop.setOnClickListener {
-            vibrator.cancel()
+             VibratorHelper.instance.cancel()
         }
 
         main_edit_diy_timings.setOnFocusChangeListener { _, hasFocus ->
@@ -402,7 +401,7 @@ class AdvancedActivity : AppCompatActivity() {
             val amplitudeI = amplitude.split(",").map { it.toInt() }.toIntArray()
 
             try {
-                vibrator.vibrate(timingsL, amplitudeI, Integer.parseInt(repeateI))
+                 VibratorHelper.instance.vibrate(timingsL, amplitudeI, Integer.parseInt(repeateI))
             } catch (e: IllegalArgumentException) {
                 Log.e("el", "error in try create vibrationEffect", e)
                 main_layout_diy_repeat.error = "创建振动失败:$e"
@@ -449,25 +448,25 @@ class AdvancedActivity : AppCompatActivity() {
     private fun createHeartBeat() {
         val timings = longArrayOf(150, 50, 150, 650)
         val amplitudes = intArrayOf(255, 0, 150, 0)
-        vibrator.vibrate(timings, amplitudes, 0)
+         VibratorHelper.instance.vibrate(timings, amplitudes, 0)
     }
 
     private fun createOffBeat() {
         val timings = longArrayOf(130,70,130,70,130,70,130,70,130,70,130)
         val amplitudes = intArrayOf(100,0,100,0,255,0,200,0,100,0,100)
-        vibrator.vibrate(timings, amplitudes, 0)
+         VibratorHelper.instance.vibrate(timings, amplitudes, 0)
     }
 
     private fun createRock() {
         val timings = longArrayOf(150,150,150,75,75,650)
         val amplitudes = intArrayOf(150,0,150,0,255,0)
-        vibrator.vibrate(timings, amplitudes, 0)
+         VibratorHelper.instance.vibrate(timings, amplitudes, 0)
     }
 
     private fun createTossCoin() {
         val timings = longArrayOf(10,180,10,90, 4,  90, 7, 80,2, 120,    4,50,2,40,1,40,     4,50,2,40,1,40,      4,50,2,40,1,40)
         val amplitudes = intArrayOf(255,0, 255,0, 240,0, 240,0, 240,0,    230,0,230,0,230,0,   220,0,220,0,220,0,   210,0,210,0,210,0)
-        vibrator.vibrate(timings, amplitudes, -1)
+         VibratorHelper.instance.vibrate(timings, amplitudes, -1)
     }
 
     private fun diyClickOpen() {
