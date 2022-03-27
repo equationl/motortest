@@ -1,11 +1,8 @@
 package com.equationl.motortest.compose.ui
 
-import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,27 +10,78 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.equationl.motortest.R
+import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.compose.theme.*
+import kotlin.math.roundToInt
 
 private const val TAG = "MainScreen"
 
+private lateinit var viewMode: MyViewMode
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), clickScreen: () -> Boolean, slipUpScreen: () -> Unit) {
+    viewMode = viewModel()
+
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val screenHeightPx = with(LocalDensity.current) { screenHeight.toPx() }
+
+    val swipeableState = rememberSwipeableState(0)
+    val anchors = mapOf(0f to 0, -screenHeightPx-100 to 1)
+    val animaY = remember {
+        if (viewMode.isFirstBoot) {
+            androidx.compose.animation.core.Animatable(0f)
+        }
+        else {
+            androidx.compose.animation.core.Animatable(-screenHeightPx)
+        }
+    }
+    LaunchedEffect(key1 = viewMode.isFirstBoot) {
+        if (!viewMode.isFirstBoot) {
+            animaY.animateTo(0f)
+        }
+        else {
+            viewMode.isFirstBoot = false
+        }
+    }
+    val modifier = Modifier.absoluteOffset(y = animaY.value.dp)
+
     MaterialTheme(
         colors = if (isDarkTheme) DarkColors else LightColors
     ) {
         Scaffold(
             topBar = {
                 MainTopBar()
+            },
+            modifier = if (viewMode.isVibrated) {
+                modifier
+            }
+            else {
+                modifier
+                    .swipeable(
+                        state = swipeableState,
+                        anchors = anchors,
+                        thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                        orientation = Orientation.Vertical
+                    )
+                    .offset { IntOffset(0, swipeableState.offset.value.roundToInt()) }
             }
         ) {
             Box(modifier = Modifier.padding(it)) {
-                MainContent(clickScreen, slipUpScreen)
+                MainContent(clickScreen)
+            }
+
+            if (swipeableState.currentValue == 1) {
+                slipUpScreen.invoke()
             }
         }
     }
@@ -51,27 +99,24 @@ fun MainTopBar() {
 }
 
 @Composable
-fun MainContent(clickScreen: () -> Boolean, slipUpScreen: () -> Unit) {
+fun MainContent(clickScreen: () -> Boolean) {
     var isVibrated by remember {
         mutableStateOf(false)
     }
-
-    var offset by remember { mutableStateOf(0f) }
-
     Box(
         Modifier
-            .scrollable(
+            /*.scrollable(
                 orientation = Orientation.Vertical,
                 state = rememberScrollableState { delta ->
                     Log.i(TAG, "MainContent: delta=$delta")
                     offset += delta
                     Log.i(TAG, "MainContent: offset=$offset")
-                    if (offset < -100) {
-                        slipUpScreen.invoke()
-                    }
+                    //if (offset < -100) {
+                        slipUpScreen.invoke(offset)
+                    //}
                     delta
                 }
-            )
+            )*/
             .clickable {
                 isVibrated = clickScreen.invoke()
             }

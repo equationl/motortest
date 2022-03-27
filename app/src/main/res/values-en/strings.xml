@@ -10,7 +10,7 @@
 	<string name="advanced_text_predefined_notSupport">System Default (requires Android 10 and above)</string>
 	<string name="advanced_text_free_test">Continuous test:</string>
 	<string name="advanced_text_amplitud">Vibration intensity (amplitude):</string>
-	<string name="advanced_text_notSupport_amplitude">Set vibration intensity: The current device does not support this option</string>
+	<string name="advanced_text_notSupport_amplitude">he current device does not support this option</string>
 	<string name="advanced_menu_high_accuracy">High-precision</string>
 	<string name="advanced_text_pro">100</string>
 	<string name="advanced_text_rate">Vibration frequency:</string>
@@ -89,6 +89,7 @@
 	<string name="advanced_action_run_background">Background vibration</string>
 	<string name="advanced_btn_pre_wait">Stay tuned</string>
 	<string name="advanced_edit_diy_tip_text_empty">Field can not be empty</string>
+	<string name="advanced_fab_description">Help</string>
 	<string name="advanced_fab_help_title">Instructions for use</string>
 	<string name="advanced_fab_help_btn_close">Close</string>
 	<string name="advanced_diy_open_choise_title">Select a document</string>
@@ -112,9 +113,10 @@
 	<string name="main_text_click_stop">Tap to stop vibrating</string>
 	<string name="main_text_slip_tip">Slide open the "More"</string>
 	<string name="main_action_run_background">Background process</string>
+	<string name="advanced_diy_start_fail">Failed to create: %1$s</string>
 
 
-    <string-array name="advanced_spinner_pre">
+	<string-array name="advanced_spinner_pre">
         <item>Heartbeat</item>
         <item>Drums</item>
         <item>Rock</item>

@@ -1,8 +1,11 @@
 package com.equationl.motortest.util
 
-import android.os.Build
+import android.content.Context
 import android.text.Html
 import android.text.Spanned
+import android.widget.Toast
+import com.equationl.motortest.R
+import com.equationl.motortest.compose.MyViewMode
 
 
 /**
@@ -13,18 +16,22 @@ import android.text.Spanned
  * Description: 一些工具方法集合
  */
 object Utils {
-    var DIY_MODE_RUN = 1
-    var DIY_MODE_SAVE = 2
-    var DIY_MODE_OPEN = 3
-    var DIY_MODE_SHARE = 4
-    var DIY_MODE_IMPORT = 5
-
     fun text2html(text: String, flag: Int=16): Spanned {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            @Suppress("DEPRECATION")
-            Html.fromHtml(text)
-        } else {
-            Html.fromHtml(text, flag)
+        return Html.fromHtml(text, flag)
+    }
+
+    fun checkDevice(context: Context, viewMode: MyViewMode): Boolean {
+        val hasVibrator =  VibratorHelper.instance.hasVibrator()
+        if (!hasVibrator) {
+            Toast.makeText(context, R.string.advanced_toast_notSupportVibrator, Toast.LENGTH_LONG).show()
+            viewMode.currentPage = 0
+            return false
         }
+
+        if (!VibratorHelper.instance.hasAmplitudeControl()) {
+            viewMode.setAmplitudesError(context.getString(R.string.advanced_text_notSupport_amplitude))
+        }
+
+        return true
     }
 }

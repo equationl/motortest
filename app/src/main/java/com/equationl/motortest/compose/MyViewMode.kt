@@ -8,6 +8,10 @@ import androidx.lifecycle.ViewModel
 class MyViewMode: ViewModel() {
     var isRunOnBackground  = false
 
+    var isFirstBoot = true
+
+    var isVibrated by mutableStateOf(false)
+
     var currentPage by mutableStateOf(0)
 
     var timingsOnError by mutableStateOf(false)

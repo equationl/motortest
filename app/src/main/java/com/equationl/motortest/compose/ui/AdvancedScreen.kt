@@ -83,14 +83,14 @@ private var rate = 50
 
 private lateinit var viewMode: MyViewMode
 
-//TODO checkDevice()
-
 //TODO 将还在使用的 view 组件迁移到 compose （例如AlertDialog）
 
 @Composable
 fun AdvancedScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), onBack: () -> Unit) {
     viewMode = viewModel()
     val context: Context = LocalContext.current
+
+    Utils.checkDevice(context, viewMode)
 
     LaunchedEffect(key1 = usingCustomPredefined, key2 = usingHighAccuracy, key3 = runBackground) {
         usingCustomPredefined = context.settingDataStore.data.map { it[DataStoreKey.usingCustomPredefined] ?: false }.first()
@@ -249,7 +249,7 @@ fun ContentAppPredefined() {
 
 @Composable
 fun ContentFreeTest() {
-    val amplitudeStopPoints = arrayOf(0, 23, 46, 69, 92, 115, 139, 162, 185, 208, 231, 225)
+    val amplitudeStopPoints = arrayOf(0, 23, 46, 69, 92, 115, 139, 162, 185, 208, 231, 255)
     val rateStopPoints = arrayOf(0, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 100)
     var amplitudeIsOnStop by remember { mutableStateOf(false) }
     val amplitudeTextScale: Float by animateFloatAsState(
@@ -264,25 +264,25 @@ fun ContentFreeTest() {
             Text(stringResource(R.string.advanced_text_amplitud))
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-            var sliderPosition by remember { mutableStateOf(if (usingHighAccuracy) 10f else 100f) }
+            var sliderPosition by remember { mutableStateOf(100f) }
             Slider(
                 value = sliderPosition,
                 onValueChange = {
                     sliderPosition = it
                     if (!usingHighAccuracy && sliderPosition.toInt() in amplitudeStopPoints) {
                         amplitude = if (it.toInt() != 0) it.toInt() else 1
-                        VibratorHelper.instance.vibrateOneShot(1, amplitude)
+                        VibratorHelper.instance.vibrateOneShot(10, amplitude)
                         amplitudeIsOnStop = true
                     }
                     else {
                         amplitudeIsOnStop = false
                         if (usingHighAccuracy) {
-                            amplitude = if (it.toInt() != 0) it.toInt()*10 else 10
+                            amplitude = if (it.toInt() != 0) it.toInt() else 1
                             VibratorHelper.instance.vibrateOneShot(10, amplitude)
                         }
                     }
                 },
-                valueRange = if (usingHighAccuracy) 0f..25f else 0f..255f,
+                valueRange = 0f..255f,
                 steps = if (usingHighAccuracy) 0 else 10,
                 modifier = Modifier.weight(9f)
             )
@@ -296,23 +296,23 @@ fun ContentFreeTest() {
             Text(stringResource(R.string.advanced_text_rate))
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
-            var sliderPosition by remember { mutableStateOf(if (usingHighAccuracy) 5f else 50f) }
+            var sliderPosition by remember { mutableStateOf(50f) }
             Slider(
                 value = sliderPosition,
                 onValueChange = {
                     sliderPosition = it
                     if (!usingHighAccuracy && sliderPosition.toInt() in rateStopPoints) {
                         rate = it.toInt()
-                        VibratorHelper.instance.vibrateOneShot(1, amplitude)
+                        VibratorHelper.instance.vibrateOneShot(10, amplitude)
                     }
                     else {
                         if (usingHighAccuracy) {
-                            rate = it.toInt() * 10
+                            rate = it.toInt()
                             VibratorHelper.instance.vibrateOneShot(10, amplitude)
                         }
                     }
                 },
-                valueRange = if (usingHighAccuracy) 0f..10f else 0f..100f,
+                valueRange = 0f..100f,
                 steps = if (usingHighAccuracy) 0 else 10,
                 modifier = Modifier.padding(end = 8.dp)
             )
@@ -321,8 +321,7 @@ fun ContentFreeTest() {
             .fillMaxWidth()
             .padding(top = 8.dp)) {
             Button(onClick = {
-                var rate2 = 100 - rate
-                rate2 = if (rate2 < 1) 1 else rate2
+                val rate2 = (100 - rate).coerceAtLeast(1)
                 val timings = longArrayOf(rate2 * 10.toLong(), rate2.toLong())
                 if (rate2 == 100) {
                     timings[0] = 3_600_000
@@ -482,20 +481,22 @@ fun ContentDiy() {
                         clickDiyStart(context)
                     }
                 )
-                Icon(
-                    painter = painterResource(R.drawable.ic_btn_menu_down),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .clickable {
-                            showMoreMenu = true
-                        }
-                )
-            }
+                Box {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_btn_menu_down),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .clickable {
+                                showMoreMenu = true
+                            }
+                    )
 
-            if (showMoreMenu) {
-                DiyMoreDropMenu(stringArrayResource(R.array.advanced_diy_more_menu), {showMoreMenu = false}) { index, _ ->
-                    onDiyMoreSelected(context, index, launcherVisualization)
+                    if (showMoreMenu) {
+                        DiyMoreDropMenu(stringArrayResource(R.array.advanced_diy_more_menu), {showMoreMenu = false}) { index, _ ->
+                            onDiyMoreSelected(context, index, launcherVisualization)
+                        }
+                    }
                 }
             }
 
@@ -622,8 +623,6 @@ private fun TopBarDropdownMenu() {
             }
         }
 
-        Divider()
-
         DropdownMenuItem(onClick = {
             expanded = false
         }) {
@@ -639,8 +638,6 @@ private fun TopBarDropdownMenu() {
                 }
                 }
         }
-
-        Divider()
 
         DropdownMenuItem(onClick = {
             expanded = false
@@ -671,11 +668,11 @@ fun TopBarMenuItem(text: String, defaultCheckState: Boolean, onCheckItem: (Boole
             }
             .fillMaxWidth()
     ) {
+        Text(text = text, modifier = Modifier.fillMaxWidth())
         Checkbox(
             checked = checkedState,
             onCheckedChange = null
         )
-        Text(text = text)
     }
 }
 
@@ -1002,6 +999,7 @@ private fun onDiyMoreSelected(
         }
     }
 }
+
 
 
 @Preview

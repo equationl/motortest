@@ -1,17 +1,17 @@
 package com.equationl.motortest
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
 import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.compose.ui.AdvancedScreen
 import com.equationl.motortest.compose.ui.MainScreen
+import com.equationl.motortest.util.Utils
 import com.equationl.motortest.util.VibratorHelper
 
 class MainActivity : AppCompatActivity() {
-    private var isVibrated = false
 
     private val viewModel: MyViewMode by viewModels()
 
@@ -27,17 +27,18 @@ class MainActivity : AppCompatActivity() {
         VibratorHelper.instance.init(this)
 
         setContent {
-            when (viewModel.currentPage) {
-                0 -> {
-                    MainScreen(clickScreen = { clickScreen() }, slipUpScreen = { slipUpScreen() })
-                }
-                1 -> {
+            Box {
+                if (Utils.checkDevice(this@MainActivity, viewModel)) {
                     AdvancedScreen(onBack = {
                         viewModel.currentPage = 0
                     })
                 }
+                if (viewModel.currentPage == 0) {
+                    MainScreen(
+                        clickScreen = { clickScreen() },
+                        slipUpScreen = { slipUpScreen() })
+                }
             }
-
         }
     }
 
@@ -65,33 +66,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun clickScreen(): Boolean {
-        if (isVibrated) {
+        if (viewModel.isVibrated) {
             cancelVibrate()
         }
         else {
-            isVibrated = true
+            viewModel.isVibrated = true
             VibratorHelper.instance.vibrate(longArrayOf(0,10000), intArrayOf(0,255), 0)
         }
 
-        return isVibrated
+        return viewModel.isVibrated
     }
 
     private fun slipUpScreen() {
-        if (!isVibrated) {
-            //FIXME 这个方法会被重复调用
-            Log.i("el", "slipUpScreen: 开始切换")
-            // TODO 添加切换页面动画
-            /*val intent = Intent()
-            intent.setClass(this, AdvancedActivity::class.java)
-            startActivity(intent)*/
-            /*startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, main_btn_advanced,
-                "shared element").toBundle())*/
-            viewModel.currentPage = 1
+        if (!viewModel.isVibrated) {
+            if (Utils.checkDevice(this, viewModel)) {
+                viewModel.currentPage = 1
+            }
         }
     }
 
     private fun cancelVibrate() {
         VibratorHelper.instance.cancel()
-        isVibrated = false
+        viewModel.isVibrated = false
     }
 }

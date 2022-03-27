@@ -101,7 +101,7 @@ class VibratorHelper {
             vibrator.vibrate(vibrationEffect)
         }
         else {
-            TODO("系统预设效果就暂时不适配了")
+            throw IllegalStateException("系统预设效果就暂时不适配了")
         }
     }
 
