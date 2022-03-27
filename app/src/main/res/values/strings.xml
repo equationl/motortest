@@ -15,7 +15,6 @@
     <string name="advanced_text_amplitud">振动强度（振幅）：</string>
     <string name="advanced_text_notSupport_amplitude">当前设备不支持此选项</string>
     <string name="advanced_menu_high_accuracy">使用高精度</string>
-    <string name="advanced_text_pro">100</string>
     <string name="advanced_text_rate">振动频率：</string>
     <string name="advanced_btn_free_start">启动</string>
     <string name="advanced_btn_free_stop">停止</string>
@@ -84,9 +83,10 @@
     </string>
     <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
-        <h3>1.34</h3>
+        <h3>1.40</h3>
         *新增图形化创建震动序列支持添加无振动（振幅为 0）<br />
         *优化图形化创建震动序列<br />
+        *移植至 compose <br />
 
         <h3>1.33</h3>
         *新增图形化创建震动序列（某些定制UI，例如MIUI，会禁止持续性的相同震动，如果是相同参数的震动，无论设置持续时间为多久，都只会持续3s左右，与本app无关。）<br />
@@ -129,12 +129,6 @@
     <string name="advanced_dialog_tab_usage">用法</string>
     <string name="advanced_dialog_tab_about">关于</string>
     <string name="advanced_dialog_tab_update">更新</string>
-    <string name="advanced_menu_btn_diy_run">运行</string>
-    <string name="advanced_menu_btn_diy_save">保存</string>
-    <string name="advanced_menu_btn_diy_open">打开</string>
-    <string name="advanced_menu_btn_diy_share">分享</string>
-    <string name="advanced_menu_btn_diy_visualization">图形</string>
-    <string name="advanced_menu_btn_diy_import">导入</string>
     <string name="advanced_action_run_background">后台振动</string>
     <string name="advanced_action_customize_system_default">自定义系统预设</string>
     <string name="advanced_btn_pre_wait">敬请期待</string>
@@ -171,11 +165,9 @@
     <string name="visualization_text_amplitude">%1$d</string>
 
 
-
     <string name="main_text_click_start">点击以开始振动</string>
     <string name="main_text_click_stop">点击以停止振动</string>
     <string name="main_text_slip_tip">滑动开启“更多”</string>
-    <string name="main_action_run_background">后台运行</string>
 
 
     <string-array name="advanced_spinner_pre">

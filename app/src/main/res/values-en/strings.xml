@@ -12,7 +12,6 @@
 	<string name="advanced_text_amplitud">Vibration intensity (amplitude):</string>
 	<string name="advanced_text_notSupport_amplitude">he current device does not support this option</string>
 	<string name="advanced_menu_high_accuracy">High-precision</string>
-	<string name="advanced_text_pro">100</string>
 	<string name="advanced_text_rate">Vibration frequency:</string>
 	<string name="advanced_btn_free_start">Run</string>
 	<string name="advanced_btn_free_stop">Stop</string>
@@ -81,11 +80,6 @@
 	<string name="advanced_dialog_tab_usage">usage</string>
 	<string name="advanced_dialog_tab_about">About</string>
 	<string name="advanced_dialog_tab_update">Update</string>
-	<string name="advanced_menu_btn_diy_run">run</string>
-	<string name="advanced_menu_btn_diy_save">save</string>
-	<string name="advanced_menu_btn_diy_open">open</string>
-	<string name="advanced_menu_btn_diy_share">share</string>
-	<string name="advanced_menu_btn_diy_import">import</string>
 	<string name="advanced_action_run_background">Background vibration</string>
 	<string name="advanced_btn_pre_wait">Stay tuned</string>
 	<string name="advanced_edit_diy_tip_text_empty">Field can not be empty</string>
@@ -112,7 +106,6 @@
 	<string name="main_text_click_start">Click to start vibration</string>
 	<string name="main_text_click_stop">Tap to stop vibrating</string>
 	<string name="main_text_slip_tip">Slide open the "More"</string>
-	<string name="main_action_run_background">Background process</string>
 	<string name="advanced_diy_start_fail">Failed to create: %1$s</string>
 
 
@@ -128,7 +121,6 @@
 	<string name="advanced_edit_systemCustomize_clr_description">Clear</string>
 	<string name="advanced_btn_system_customize_start">Start</string>
 	<string name="advanced_action_customize_system_default">Custom system preset</string>
-	<string name="advanced_menu_btn_diy_visualization">Visualization</string>
     <string name="visualization_sideBar_text_strong">Strong</string>
 	<string name="visualization_sideBar_text_weak">Weak</string>
 	<string name="visualization_btn_save">Save</string>

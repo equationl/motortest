@@ -3,6 +3,7 @@ package com.equationl.motortest.compose.ui
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -14,7 +15,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -105,21 +105,10 @@ fun MainContent(clickScreen: () -> Boolean) {
     }
     Box(
         Modifier
-            /*.scrollable(
-                orientation = Orientation.Vertical,
-                state = rememberScrollableState { delta ->
-                    Log.i(TAG, "MainContent: delta=$delta")
-                    offset += delta
-                    Log.i(TAG, "MainContent: offset=$offset")
-                    //if (offset < -100) {
-                        slipUpScreen.invoke(offset)
-                    //}
-                    delta
-                }
-            )*/
-            .clickable {
-                isVibrated = clickScreen.invoke()
-            }
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {isVibrated = clickScreen.invoke()})
     ) {
         Column(
             Modifier.fillMaxSize(),
@@ -153,32 +142,4 @@ fun MainContent(clickScreen: () -> Boolean) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewMainLight() {
-    var isVibrated = false
-    MainScreen(
-        false,
-        {
-            isVibrated = !isVibrated
-            isVibrated
-        },
-        {}
-    )
-}
-
-@Preview
-@Composable
-fun PreviewMainDark() {
-    var isVibrated = false
-    MainScreen(
-        true,
-        {
-            isVibrated = !isVibrated
-            isVibrated
-        },
-        {}
-    )
 }
