@@ -4,6 +4,7 @@
     <string name="advanced_toast_systemCustomize_notSupportVlue">非法数值！</string>
     <string name="advanced_text_predefined">系统预设：</string>
     <string name="advanced_edit_system_customize">请输入任意整数</string>
+    <string name="advanced_edit_systemCustomize_clr_description">清除</string>
     <string name="advanced_btn_system_customize_start">启动</string>
     <string name="advanced_text_click">单击</string>
     <string name="advanced_text_doubleClick">双击</string>
@@ -12,10 +13,9 @@
     <string name="advanced_text_predefined_notSupport">系统预设（需要安卓10及以上）</string>
     <string name="advanced_text_free_test">连续测试：</string>
     <string name="advanced_text_amplitud">振动强度（振幅）：</string>
-    <string name="advanced_text_notSupport_amplitude">设置振动强度：当前设备不支持此选项</string>
+    <string name="advanced_text_notSupport_amplitude">当前设备不支持此选项</string>
     <string name="advanced_menu_high_accuracy">使用高精度</string>
-    <string name="advanced_text_pro">100</string>
-    <string name="advanced_text_rate">震动频率</string>
+    <string name="advanced_text_rate">振动频率：</string>
     <string name="advanced_btn_free_start">启动</string>
     <string name="advanced_btn_free_stop">停止</string>
     <string name="advanced_text_app_predefined">程序预设：</string>
@@ -83,9 +83,10 @@
     </string>
     <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
-        <h3>1.34</h3>
+        <h3>1.40</h3>
         *新增图形化创建震动序列支持添加无振动（振幅为 0）<br />
         *优化图形化创建震动序列<br />
+        *移植至 compose <br />
 
         <h3>1.33</h3>
         *新增图形化创建震动序列（某些定制UI，例如MIUI，会禁止持续性的相同震动，如果是相同参数的震动，无论设置持续时间为多久，都只会持续3s左右，与本app无关。）<br />
@@ -128,16 +129,11 @@
     <string name="advanced_dialog_tab_usage">用法</string>
     <string name="advanced_dialog_tab_about">关于</string>
     <string name="advanced_dialog_tab_update">更新</string>
-    <string name="advanced_menu_btn_diy_run">运行</string>
-    <string name="advanced_menu_btn_diy_save">保存</string>
-    <string name="advanced_menu_btn_diy_open">打开</string>
-    <string name="advanced_menu_btn_diy_share">分享</string>
-    <string name="advanced_menu_btn_diy_visualization">图形</string>
-    <string name="advanced_menu_btn_diy_import">导入</string>
     <string name="advanced_action_run_background">后台振动</string>
     <string name="advanced_action_customize_system_default">自定义系统预设</string>
     <string name="advanced_btn_pre_wait">敬请期待</string>
     <string name="advanced_edit_diy_tip_text_empty">字段不能为空</string>
+    <string name="advanced_fab_description">帮助</string>
     <string name="advanced_fab_help_title">使用说明</string>
     <string name="advanced_fab_help_btn_close">关闭</string>
     <string name="advanced_diy_open_choise_title">选择文件</string>
@@ -157,6 +153,7 @@
     <string name="advanced_diy_import_dialog_btn_sure">确定</string>
     <string name="advanced_diy_import_text_isEmpty">数据不能为空</string>
     <string name="advanced_diy_import_fail">导入失败！</string>
+    <string name="advanced_diy_start_fail">创建振动失败：%1$s</string>
 
     <string name="visualization_sideBar_text_strong">强</string>
     <string name="visualization_sideBar_text_weak">弱</string>
@@ -168,11 +165,9 @@
     <string name="visualization_text_amplitude">%1$d</string>
 
 
-
     <string name="main_text_click_start">点击以开始振动</string>
     <string name="main_text_click_stop">点击以停止振动</string>
     <string name="main_text_slip_tip">滑动开启“更多”</string>
-    <string name="main_action_run_background">后台运行</string>
 
 
     <string-array name="advanced_spinner_pre">
@@ -181,5 +176,13 @@
         <item>摇滚</item>
         <item>投币</item>
         <item>敬请期待&#8230;</item>
+    </string-array>
+
+    <string-array name="advanced_diy_more_menu">
+        <item>图形</item>
+        <item>保存</item>
+        <item>打开</item>
+        <item>导入</item>
+        <item>分享</item>
     </string-array>
 </resources>
