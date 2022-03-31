@@ -16,9 +16,6 @@
         android:theme="@style/Theme.Main.NoActionBar"
         android:dataExtractionRules="@xml/data_extraction_rules"
         tools:targetApi="s">
-        <activity
-            android:name=".VisualizationActivity"
-            android:exported="true" />
         <activity android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

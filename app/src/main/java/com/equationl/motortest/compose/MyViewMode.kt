@@ -28,6 +28,11 @@ class MyViewMode: ViewModel() {
     var amplitudesText by mutableStateOf("")
     var repeatText by mutableStateOf("")
 
+    var visualTimings = "0"
+    var visualAmplitude = "0"
+
+    var isBackFromVisual by mutableStateOf(false)
+
     fun clearDiyInputError() {
         amplitudesErrorText = ""
         timingsErrorText = ""

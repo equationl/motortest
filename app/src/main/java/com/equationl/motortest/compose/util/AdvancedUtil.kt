@@ -8,11 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.AlertDialog
 import com.equationl.motortest.R
-import com.equationl.motortest.VisualizationActivity
 import com.equationl.motortest.adapter.MainDiyDialogItemAdapter
 import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.database.DatabaseHelper
@@ -324,12 +321,13 @@ object AdvancedUtil {
     fun onDiyMoreSelected(
         context: Context,
         index: Int,
-        launcherVisualization: ManagedActivityResultLauncher<Intent, ActivityResult>,
         viewMode: MyViewMode
     ) {
         when (index) {
             0 -> {
-                launcherVisualization.launch(Intent(context, VisualizationActivity::class.java))
+                viewMode.visualAmplitude = "0"
+                viewMode.visualTimings = "0"
+                viewMode.currentPage = 2
             }
             1 -> {
                 diyClickSave(context, viewMode)

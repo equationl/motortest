@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.compose.ui.AdvancedScreen
 import com.equationl.motortest.compose.ui.MainScreen
+import com.equationl.motortest.compose.ui.VisualizationScreen
 import com.equationl.motortest.util.Utils
 import com.equationl.motortest.util.VibratorHelper
 
@@ -27,16 +28,22 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             viewModel.isSupportAdvanced = Utils.checkDevice(this@MainActivity, viewModel)
-            Box {
-                if (viewModel.isSupportAdvanced) {
-                    AdvancedScreen(onBack = {
-                        viewModel.currentPage = 0
-                    })
-                }
-                if (viewModel.currentPage == 0) {
-                    MainScreen(
-                        clickScreen = { clickScreen() },
-                        slipUpScreen = { slipUpScreen() })
+
+            if (viewModel.currentPage == 2) {
+                VisualizationScreen()
+            }
+            else {
+                Box {
+                    if (viewModel.isSupportAdvanced) {
+                        AdvancedScreen(onBack = {
+                            viewModel.currentPage = 0
+                        })
+                    }
+                    if (viewModel.currentPage == 0) {
+                        MainScreen(
+                            clickScreen = { clickScreen() },
+                            slipUpScreen = { slipUpScreen() })
+                    }
                 }
             }
         }
@@ -50,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        if (viewModel.currentPage == 0) {
+        if (viewModel.currentPage == 0 || viewModel.currentPage == 2) {
             cancelVibrate()
         }
         else if (!viewModel.isRunOnBackground) {
@@ -59,10 +66,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (viewModel.currentPage == 0)
-            super.onBackPressed()
-        else
-            viewModel.currentPage = 0
+        when (viewModel.currentPage) {
+            0 -> super.onBackPressed()
+            1 -> viewModel.currentPage = 0
+            2 -> viewModel.currentPage = 1
+        }
     }
 
     private fun clickScreen(): Boolean {

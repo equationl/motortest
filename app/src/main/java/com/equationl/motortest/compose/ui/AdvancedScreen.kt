@@ -1,13 +1,10 @@
 package com.equationl.motortest.compose.ui
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
@@ -72,6 +69,13 @@ fun AdvancedScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), onBack: () -> U
     val context: Context = LocalContext.current
 
     Utils.checkDevice(context, viewMode)
+
+    if (viewMode.isBackFromVisual) {
+        val timings = viewMode.visualTimings
+        val amplitude = viewMode.visualAmplitude
+        AdvancedUtil.diyClickSave(context, viewMode, true, timings, amplitude)
+        viewMode.isBackFromVisual = false
+    }
 
     LaunchedEffect(key1 = usingCustomPredefined, key2 = usingHighAccuracy, key3 = runBackground) {
         usingCustomPredefined = context.settingDataStore.data.map { it[DataStoreKey.usingCustomPredefined] ?: false }.first()
@@ -327,13 +331,6 @@ fun ContentFreeTest() {
 fun ContentDiy() {
     val context: Context = LocalContext.current
     var showMoreMenu by remember { mutableStateOf(false) }
-    val launcherVisualization = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            val timings = it.data?.getStringExtra("timings")
-            val amplitude = it.data?.getStringExtra("amplitude")
-            AdvancedUtil.diyClickSave(context, viewMode, true, timings, amplitude)
-        }
-    }
 
     Column(modifier = Modifier.padding(start = 8.dp, top = 16.dp)) {
         Text(stringResource(R.string.advanced_text_diy))
@@ -475,7 +472,7 @@ fun ContentDiy() {
 
                     if (showMoreMenu) {
                         DiyMoreDropMenu(stringArrayResource(R.array.advanced_diy_more_menu), {showMoreMenu = false}) { index, _ ->
-                            AdvancedUtil.onDiyMoreSelected(context, index, launcherVisualization, viewMode)
+                            AdvancedUtil.onDiyMoreSelected(context, index, viewMode)
                         }
                     }
                 }
