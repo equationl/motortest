@@ -83,6 +83,9 @@
     </string>
     <string name="advanced_dialog_help_content_update" translatable="false">
         <![CDATA[
+         <h3>1.41</h3>
+        *修复在不兼容的设备中上滑会出现空白页的问题<br />
+
         <h3>1.40</h3>
         *新增图形化创建震动序列支持添加无振动（振幅为 0）<br />
         *优化图形化创建震动序列<br />

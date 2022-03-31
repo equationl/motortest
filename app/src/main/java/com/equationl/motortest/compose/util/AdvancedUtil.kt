@@ -5,7 +5,7 @@ import android.content.Intent
 import android.text.method.LinkMovementMethod
 import android.util.Base64
 import android.util.Log
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -17,11 +17,11 @@ import com.equationl.motortest.adapter.MainDiyDialogItemAdapter
 import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.database.DatabaseHelper
 import com.equationl.motortest.database.VibrationEffects
+import com.equationl.motortest.databinding.DialogAdvancedHelpBinding
 import com.equationl.motortest.util.Utils
 import com.equationl.motortest.util.VibratorHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.dialog_advanced_help.view.*
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,32 +30,35 @@ object AdvancedUtil {
     private const val TAG = "Advanced"
 
     fun clickHelpBtn(context: Context) {
-        val layout = View.inflate(context, R.layout.dialog_advanced_help, null)
+        //val layout = View.inflate(context, R.layout.dialog_advanced_help, null)
+        //val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val binding = DialogAdvancedHelpBinding.inflate(LayoutInflater.from(context))
+
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.advanced_fab_help_title)
             .setPositiveButton(R.string.advanced_fab_help_btn_close, null)
-            .setView(layout)
+            .setView(binding.root)
             .show()
-        layout.advanced_dialog_text_content.movementMethod = LinkMovementMethod.getInstance()
-        layout.advanced_dialog_text_content.text = Utils.text2html(context.getString(R.string.advanced_dialog_help_content_summary))
-        layout.advanced_dialog_tab_layout.addOnTabSelectedListener(object :
+        binding.textContent.movementMethod = LinkMovementMethod.getInstance()
+        binding.textContent.text = Utils.text2html(context.getString(R.string.advanced_dialog_help_content_summary))
+        binding.tabLayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     0 -> {
-                        layout.advanced_dialog_text_content.text = Utils.text2html(context.getString(
+                        binding.textContent.text = Utils.text2html(context.getString(
                             R.string.advanced_dialog_help_content_summary))
                     }
                     1 -> {
-                        layout.advanced_dialog_text_content.text = Utils.text2html(context.getString(
+                        binding.textContent.text = Utils.text2html(context.getString(
                             R.string.advanced_dialog_help_content_usage))
                     }
                     2 -> {
-                        layout.advanced_dialog_text_content.text = Utils.text2html(context.getString(
+                        binding.textContent.text = Utils.text2html(context.getString(
                             R.string.advanced_dialog_help_content_about))
                     }
                     3 -> {
-                        layout.advanced_dialog_text_content.text = Utils.text2html(context.getString(
+                        binding.textContent.text = Utils.text2html(context.getString(
                             R.string.advanced_dialog_help_content_update))
                     }
                 }

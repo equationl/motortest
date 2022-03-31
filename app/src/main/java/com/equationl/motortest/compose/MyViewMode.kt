@@ -10,6 +10,8 @@ class MyViewMode: ViewModel() {
 
     var isFirstBoot = true
 
+    var isSupportAdvanced = true
+
     var isVibrated by mutableStateOf(false)
 
     var currentPage by mutableStateOf(0)

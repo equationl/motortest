@@ -18,6 +18,12 @@ import androidx.appcompat.app.AppCompatActivity
 class VibratorHelper {
     private lateinit var vibrator: Vibrator
 
+    companion object {
+        val instance by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            VibratorHelper()
+        }
+    }
+
     fun init(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
@@ -31,12 +37,6 @@ class VibratorHelper {
 
     fun init(vibrator: Vibrator) {
         this.vibrator = vibrator
-    }
-
-    companion object {
-        val instance by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            VibratorHelper()
-        }
     }
 
     fun cancel() {

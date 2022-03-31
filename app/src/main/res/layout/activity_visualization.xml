@@ -7,7 +7,7 @@
     tools:context=".VisualizationActivity">
 
     <RelativeLayout
-        android:id="@+id/visualization_side_bar"
+        android:id="@+id/side_bar"
         android:layout_width="20dp"
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/visualization_side_bar_marginStart"
@@ -38,26 +38,26 @@
     </RelativeLayout>
 
     <com.equationl.motortest.view.MyTouchView
-        android:id="@+id/visualization_touchView"
+        android:id="@+id/touchView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/visualization_bottom_bar"
-        app:layout_constraintStart_toEndOf="@+id/visualization_side_bar" />
+        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
+        app:layout_constraintStart_toEndOf="@+id/side_bar" />
 
     <LinearLayout
-        android:id="@+id/visualization_bottom_bar"
+        android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/visualization_side_bar">
+        app:layout_constraintTop_toBottomOf="@+id/side_bar">
 
         <Button
-            android:id="@+id/visualization_btn_back"
+            android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -71,13 +71,13 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/visualization_text_time"
+                android:id="@+id/text_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/visualization_text_time" />
 
             <TextView
-                android:id="@+id/visualization_text_amplitude"
+                android:id="@+id/text_amplitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -86,7 +86,7 @@
 
         </LinearLayout>
         <Button
-            android:id="@+id/visualization_btn_save"
+            android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/visualization_btn_save" />

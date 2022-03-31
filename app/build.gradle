@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -12,9 +10,16 @@ android {
         applicationId "com.equationl.motortest"
         minSdkVersion 24
         targetSdkVersion 31
-        versionCode 8
-        versionName "1.40"
+        versionCode 9
+        versionName "1.41"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // 设置 room 文件导出目录， 见： https://stackoverflow.com/questions/44322178/room-schema-export-directory-is-not-provided-to-the-annotation-processor-so-we
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
     }
     buildTypes {
         release {

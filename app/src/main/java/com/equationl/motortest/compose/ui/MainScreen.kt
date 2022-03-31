@@ -62,7 +62,7 @@ fun MainScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), clickScreen: () -> 
             topBar = {
                 MainTopBar()
             },
-            modifier = if (viewMode.isVibrated) {
+            modifier = if (viewMode.isVibrated || !viewMode.isSupportAdvanced) {
                 modifier
             }
             else {

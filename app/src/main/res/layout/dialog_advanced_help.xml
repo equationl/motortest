@@ -15,7 +15,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/advanced_dialog_text_content"
+                android:id="@+id/text_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/advanced_dialog_help_content_summary" />
@@ -23,7 +23,7 @@
     </ScrollView>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/advanced_dialog_tab_layout"
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp">

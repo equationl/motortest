@@ -22,13 +22,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         VibratorHelper.instance.init(this)
 
         setContent {
+            viewModel.isSupportAdvanced = Utils.checkDevice(this@MainActivity, viewModel)
             Box {
-                if (Utils.checkDevice(this@MainActivity, viewModel)) {
+                if (viewModel.isSupportAdvanced) {
                     AdvancedScreen(onBack = {
                         viewModel.currentPage = 0
                     })
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun slipUpScreen() {
         if (!viewModel.isVibrated) {
-            if (Utils.checkDevice(this, viewModel)) {
+            if (viewModel.isSupportAdvanced) {
                 viewModel.currentPage = 1
             }
         }
