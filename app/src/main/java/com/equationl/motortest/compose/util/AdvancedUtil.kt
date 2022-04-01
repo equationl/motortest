@@ -2,109 +2,314 @@ package com.equationl.motortest.compose.util
 
 import android.content.Context
 import android.content.Intent
+import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.util.Base64
 import android.util.Log
-import android.view.LayoutInflater
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.TextView
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import com.equationl.motortest.R
-import com.equationl.motortest.adapter.MainDiyDialogItemAdapter
 import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.database.DatabaseHelper
 import com.equationl.motortest.database.VibrationEffects
-import com.equationl.motortest.databinding.DialogAdvancedHelpBinding
-import com.equationl.motortest.util.Utils
 import com.equationl.motortest.util.VibratorHelper
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 
-object AdvancedUtil {
-    private const val TAG = "Advanced"
+@Composable
+private fun NormalDialog(
+    title: String,
+    button: String,
+    onDismissRequest: () -> Unit,
+    onClickButton: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    Dialog(onDismissRequest) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .background(
+                    Color.White, shape = RoundedCornerShape(8.dp)
+                )
+                .padding(16.dp)
+        ) {
+            Text(
+                title,
+                style = MaterialTheme.typography.subtitle1
+            )
 
-    fun clickHelpBtn(context: Context) {
-        //val layout = View.inflate(context, R.layout.dialog_advanced_help, null)
-        //val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val binding = DialogAdvancedHelpBinding.inflate(LayoutInflater.from(context))
+            content.invoke()
 
-        MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.advanced_fab_help_title)
-            .setPositiveButton(R.string.advanced_fab_help_btn_close, null)
-            .setView(binding.root)
-            .show()
-        binding.textContent.movementMethod = LinkMovementMethod.getInstance()
-        binding.textContent.text = Utils.text2html(context.getString(R.string.advanced_dialog_help_content_summary))
-        binding.tabLayout.addOnTabSelectedListener(object :
-            TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                when (tab.position) {
-                    0 -> {
-                        binding.textContent.text = Utils.text2html(context.getString(
-                            R.string.advanced_dialog_help_content_summary))
-                    }
-                    1 -> {
-                        binding.textContent.text = Utils.text2html(context.getString(
-                            R.string.advanced_dialog_help_content_usage))
-                    }
-                    2 -> {
-                        binding.textContent.text = Utils.text2html(context.getString(
-                            R.string.advanced_dialog_help_content_about))
-                    }
-                    3 -> {
-                        binding.textContent.text = Utils.text2html(context.getString(
-                            R.string.advanced_dialog_help_content_update))
-                    }
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.End) {
+                OutlinedButton(
+                    onClickButton,
+                    border = BorderStroke(0.dp, Color.White)
+                ) {
+                    Text(button)
                 }
             }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {}
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-        })
+        }
     }
+}
 
-    private fun diyClickOpen(context: Context, viewMode: MyViewMode) {
-        var alertDialog: AlertDialog? = null
-        val databaseHelper = DatabaseHelper.getInstance(context)
-        val list = databaseHelper.getAll()
-        val nameItems = mutableListOf<String>()
-        val dateItems = mutableListOf<String>()
-        for (i in list.indices) {
-            nameItems.add(list[i].name)
-            dateItems.add(SimpleDateFormat("yyy-MM-dd HH:mm:ss", Locale.CHINA).format(list[i].createTime))
+@Composable
+fun HelpDialog(viewMode: MyViewMode) {
+    NormalDialog(
+        title = stringResource(R.string.advanced_fab_help_title),
+        button = stringResource(R.string.advanced_fab_help_btn_close),
+        onDismissRequest = {
+            viewMode.openHelpDialog = false
+        },
+        onClickButton = {
+            viewMode.openHelpDialog = false
+        }) {
+        HelpDialogContent()
+    }
+}
+
+@Composable
+private fun HelpDialogContent() {
+    val showText = listOf(
+        stringResource(R.string.advanced_dialog_help_content_summary),
+        stringResource(R.string.advanced_dialog_help_content_usage),
+        stringResource(R.string.advanced_dialog_help_content_about),
+        stringResource(R.string.advanced_dialog_help_content_update)
+    )
+    val defaultShowText = stringResource(R.string.advanced_dialog_help_content_summary)
+
+    var currentShowText by remember { mutableStateOf(defaultShowText) }
+
+    var currentTabIndex by remember { mutableStateOf(0) }
+
+    Column {
+        Column(modifier = Modifier
+            .heightIn(0.dp, 300.dp)
+            .verticalScroll(rememberScrollState())) {
+            HtmlText(currentShowText)
         }
 
-        val mainDiyDialogItemAdapter = MainDiyDialogItemAdapter(nameItems, dateItems, context)
-        mainDiyDialogItemAdapter.setOnItemClickListener(object: MainDiyDialogItemAdapter.OnItemClickListener {
-            override fun onClickDelete(position: Int) {
-                databaseHelper.delete(list[position])
-                nameItems.removeAt(position)
-                dateItems.removeAt(position)
-                mainDiyDialogItemAdapter.notifyDataSetChanged()
+        TabRow(
+            selectedTabIndex = currentTabIndex,
+            backgroundColor = Color.Transparent,
+            divider = {},
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Tab(selected = currentTabIndex == 0, onClick = {
+                currentTabIndex = 0
+                currentShowText = showText[currentTabIndex]
+            }) {
+                Text(stringResource(R.string.advanced_dialog_tab_summary))
             }
 
-            override fun onClickItem(position: Int) {
-                if (alertDialog != null) {
-                    if (alertDialog!!.isShowing) {
-                        alertDialog!!.dismiss()
+            Tab(selected = currentTabIndex == 1, onClick = {
+                currentTabIndex = 1
+                currentShowText = showText[currentTabIndex]
+            }) {
+                Text(stringResource(R.string.advanced_dialog_tab_usage))
+            }
+
+            Tab(selected = currentTabIndex == 2, onClick = {
+                currentTabIndex = 2
+                currentShowText = showText[currentTabIndex]
+            }) {
+                Text(stringResource(R.string.advanced_dialog_tab_about))
+            }
+
+            Tab(selected = currentTabIndex == 3, onClick = {
+                currentTabIndex = 3
+                currentShowText = showText[currentTabIndex]
+            }) {
+                Text(stringResource(R.string.advanced_dialog_tab_update))
+            }
+
+        }
+    }
+}
+
+@Composable
+private fun HtmlText(html: String, modifier: Modifier = Modifier) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context -> TextView(context) },
+        update = {
+            it.movementMethod = LinkMovementMethod.getInstance()
+            it.text = Html.fromHtml(html, 16)
+        }
+    )
+}
+
+@Composable
+fun EffectDialog(context: Context, viewMode: MyViewMode) {
+    val databaseHelper = DatabaseHelper.getInstance(context)
+
+    val saveList = remember { mutableStateListOf<VibrationEffects>() }
+
+    NormalDialog(
+        title = stringResource(R.string.advanced_diy_open_choise_title),
+        button = stringResource(R.string.advanced_diy_open_choise_btn_close),
+        onDismissRequest = {
+            viewMode.openEffectDialog = false
+        },
+        onClickButton = {
+            viewMode.openEffectDialog = false
+        }) {
+        Column(modifier = Modifier
+            .height(300.dp)) {
+            if (saveList.isEmpty()) {
+                Row(modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.advanced_saveList_empty))
+                }
+            }
+
+            LazyColumn(modifier = Modifier.padding(top = 8.dp)) {
+                for (data in saveList) {
+                    item(key = data.id) {
+                        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                // 点击 ITEM
+                                viewMode.timingsText = data.timings
+                                viewMode.amplitudesText = data.amplitude
+                                viewMode.repeatText = data.repeate.toString()
+                                viewMode.openEffectDialog = false
+                            }) {
+                            Column {
+                                Text(data.name)
+                                Text(SimpleDateFormat("yyy-MM-dd HH:mm:ss", Locale.CHINA).format(data.createTime))
+                            }
+                            Icon(
+                                painter = painterResource(android.R.drawable.ic_menu_delete),
+                                contentDescription = "delete",
+                                modifier = Modifier.clickable {
+                                    // 删除
+                                    databaseHelper.delete(data)
+                                    saveList.remove(data)
+                            })
+                        }
                     }
                 }
-                viewMode.timingsText = list[position].timings
-                viewMode.amplitudesText = list[position].amplitude
-                viewMode.repeatText = list[position].repeate.toString()
             }
-        })
-
-        alertDialog = MaterialAlertDialogBuilder(context)
-            .setTitle(context.getString(R.string.advanced_diy_open_choise_title))
-            .setPositiveButton(context.getString(R.string.advanced_diy_open_choise_btn_close), null)
-            .setAdapter(mainDiyDialogItemAdapter, null)
-            .show()
+        }
     }
+
+    LaunchedEffect(key1 = saveList) {
+        saveList.clear()
+        saveList.addAll(databaseHelper.getAll())
+    }
+}
+
+@Composable
+fun SaveDialog(viewMode: MyViewMode, scaffoldState: ScaffoldState) {
+    val scope = rememberCoroutineScope()
+    var inputText by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    NormalDialog(
+        title = stringResource(R.string.advanced_diy_save_fileName_title),
+        button = stringResource(R.string.advanced_diy_save_fileName_btn_sure),
+        onDismissRequest = {
+            viewMode.openSaveDialog = false
+        },
+        onClickButton = {
+            if (inputText.isBlank()) {
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.advanced_diy_save_fileName_isEmpty))
+                }
+            }
+            else {
+                val databaseHelper = DatabaseHelper.getInstance(context)
+                databaseHelper.insert(VibrationEffects(null, viewMode.timings, viewMode.amplitude, viewMode.repeateI.toInt(), inputText, System.currentTimeMillis()))
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.advanced_diy_save_success))
+                }
+                viewMode.timings = ""
+                viewMode.amplitude = ""
+                viewMode.repeateI = ""
+                viewMode.openSaveDialog = false
+            }
+        }) {
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = {inputText = it},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+    }
+}
+
+@Composable
+fun ImportDialog(viewMode: MyViewMode, scaffoldState: ScaffoldState) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var inputText by remember { mutableStateOf("") }
+
+    NormalDialog(
+        title = stringResource(R.string.advanced_diy_import_dialog_title),
+        button = stringResource(R.string.advanced_diy_import_dialog_btn_sure),
+        onDismissRequest = {
+            viewMode.openImportDialog = false
+                           },
+        onClickButton = {
+            if (inputText.isBlank()) {
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.advanced_diy_import_text_isEmpty))
+                }
+            }
+            else {
+                try {
+                    val text = String(Base64.decode(inputText, Base64.DEFAULT))
+                    val array = JSONObject(text)
+                    val timings = array.getString("timings")
+                    val amplitude = array.getString("amplitude")
+                    val repeate = array.getString("repeate")
+                    viewMode.timingsText = timings
+                    viewMode.amplitudesText = amplitude
+                    viewMode.repeatText = repeate
+                    viewMode.openImportDialog = false
+                }
+                catch (e: Exception) {
+                    Log.e("el", "import fail:", e)
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.advanced_diy_import_fail))
+                    }
+                }
+            }
+        }) {
+        OutlinedTextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(8.dp)
+        )
+    }
+}
+
+object AdvancedUtil {
+    private const val TAG = "Advanced"
 
     fun clickDiyStart(context: Context, viewMode: MyViewMode) {
         viewMode.clearDiyInputError()
@@ -219,24 +424,16 @@ object AdvancedUtil {
         return listOf(timing, amplitude, repeateI.toString())
     }
 
-    fun diyClickSave(
-        context: Context,
-        viewMode: MyViewMode,
-        isFromVisualization: Boolean = false,
-        timingsT: String? = "",
-        amplitudeT: String? = ""
-    ) {
+    fun diyClickSave(context: Context, viewMode: MyViewMode, isFromVisualization: Boolean = false) {
         val timings: String
         val amplitude: String
         val repeateI: String
+
         if (isFromVisualization) {
-            if (timingsT == null || amplitudeT == null) {
-                Log.w(TAG, "diyClickSave: result data is null!")
-                return
-            }
-            timings = timingsT
-            amplitude = amplitudeT
+            timings = viewMode.visualTimings
+            amplitude = viewMode.visualAmplitude
             repeateI = "-1"
+
             viewMode.timingsText = timings
             viewMode.amplitudesText = amplitude
             viewMode.repeatText = repeateI
@@ -249,24 +446,10 @@ object AdvancedUtil {
             repeateI = data[2]
         }
 
-        val editText = EditText(context)
-        MaterialAlertDialogBuilder(context)
-            .setTitle(context.getString(R.string.advanced_diy_save_fileName_title))
-            .setView(editText)
-            .setPositiveButton(context.getString(R.string.advanced_diy_save_fileName_btn_sure)) { _, _ ->
-                val text = editText.text.toString()
-                if (text == "") {
-                    Toast.makeText(context, context.getString(R.string.advanced_diy_save_fileName_isEmpty),
-                        Toast.LENGTH_LONG).show()
-                }
-                else {
-                    val databaseHelper = DatabaseHelper.getInstance(context)
-                    databaseHelper.insert(VibrationEffects(null, timings, amplitude, Integer.parseInt(repeateI), text, System.currentTimeMillis()))
-                    Toast.makeText(context, context.getString(R.string.advanced_diy_save_success),
-                        Toast.LENGTH_LONG).show()
-                }
-            }
-            .show()
+        viewMode.timings = timings
+        viewMode.amplitude = amplitude
+        viewMode.repeateI = repeateI
+        viewMode.openSaveDialog = true
     }
 
     private fun diyClickShare(context: Context, viewMode: MyViewMode) {
@@ -286,38 +469,6 @@ object AdvancedUtil {
         context.startActivity(Intent.createChooser(intent, context.getText(R.string.app_name)))
     }
 
-    private fun diyClickImport(context: Context, viewMode: MyViewMode) {
-        val editText = EditText(context)
-        MaterialAlertDialogBuilder(context)
-            .setTitle(context.getString(R.string.advanced_diy_import_dialog_title))
-            .setView(editText)
-            .setPositiveButton(context.getString(R.string.advanced_diy_import_dialog_btn_sure)) { _, _ ->
-                var text = editText.text.toString()
-                if (text == "") {
-                    Toast.makeText(context, context.getString(R.string.advanced_diy_import_text_isEmpty),
-                        Toast.LENGTH_LONG).show()
-                }
-                else {
-                    try {
-                        text = String(Base64.decode(text, Base64.DEFAULT))
-                        val array = JSONObject(text)
-                        val timings = array.getString("timings")
-                        val amplitude = array.getString("amplitude")
-                        val repeate = array.getString("repeate")
-                        viewMode.timingsText = timings
-                        viewMode.amplitudesText = amplitude
-                        viewMode.repeatText = repeate
-                    }
-                    catch (e: Exception) {
-                        Log.e("el", "import fail:", e)
-                        Toast.makeText(context, context.getString(R.string.advanced_diy_import_fail),
-                            Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-            .show()
-    }
-
     fun onDiyMoreSelected(
         context: Context,
         index: Int,
@@ -333,10 +484,12 @@ object AdvancedUtil {
                 diyClickSave(context, viewMode)
             }
             2 -> {
-                diyClickOpen(context, viewMode)
+                viewMode.openEffectDialog = true
+                //diyClickOpen(context, viewMode)
             }
             3 -> {
-                diyClickImport(context, viewMode)
+                viewMode.openImportDialog = true
+                //diyClickImport(context, viewMode)
             }
             4 -> {
                 diyClickShare(context, viewMode)

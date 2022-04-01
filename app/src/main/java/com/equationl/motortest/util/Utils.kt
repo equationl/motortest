@@ -1,8 +1,6 @@
 package com.equationl.motortest.util
 
 import android.content.Context
-import android.text.Html
-import android.text.Spanned
 import android.widget.Toast
 import com.equationl.motortest.R
 import com.equationl.motortest.compose.MyViewMode
@@ -16,10 +14,6 @@ import com.equationl.motortest.compose.MyViewMode
  * Description: 一些工具方法集合
  */
 object Utils {
-    fun text2html(text: String, flag: Int=16): Spanned {
-        return Html.fromHtml(text, flag)
-    }
-
     fun checkDevice(context: Context, viewMode: MyViewMode): Boolean {
         val hasVibrator =  VibratorHelper.instance.hasVibrator()
         if (!hasVibrator) {

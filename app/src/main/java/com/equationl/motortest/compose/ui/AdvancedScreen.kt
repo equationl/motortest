@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.clickable
@@ -37,7 +37,7 @@ import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.compose.theme.DarkColors
 import com.equationl.motortest.compose.theme.ErrorTextSize
 import com.equationl.motortest.compose.theme.LightColors
-import com.equationl.motortest.compose.util.AdvancedUtil
+import com.equationl.motortest.compose.util.*
 import com.equationl.motortest.constants.DataStoreKey
 import com.equationl.motortest.settingDataStore
 import com.equationl.motortest.util.PredefinedEffect
@@ -61,19 +61,16 @@ private var rate = 50
 
 private lateinit var viewMode: MyViewMode
 
-//TODO 将还在使用的 view 组件迁移到 compose （例如AlertDialog）
-
 @Composable
 fun AdvancedScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), onBack: () -> Unit) {
     viewMode = viewModel()
     val context: Context = LocalContext.current
+    val scaffoldState = rememberScaffoldState()
 
     Utils.checkDevice(context, viewMode)
 
     if (viewMode.isBackFromVisual) {
-        val timings = viewMode.visualTimings
-        val amplitude = viewMode.visualAmplitude
-        AdvancedUtil.diyClickSave(context, viewMode, true, timings, amplitude)
+        AdvancedUtil.diyClickSave(context, viewMode, true)
         viewMode.isBackFromVisual = false
     }
 
@@ -88,6 +85,7 @@ fun AdvancedScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), onBack: () -> U
         colors = if (isDarkTheme) DarkColors else LightColors
     ) {
         Scaffold(
+            scaffoldState = scaffoldState,
             topBar = {
                 TopBar(onBack)
             },
@@ -98,16 +96,30 @@ fun AdvancedScreen(isDarkTheme: Boolean = isSystemInDarkTheme(), onBack: () -> U
             Box(modifier = Modifier
                 .padding(it)
                 .verticalScroll(rememberScrollState())) {
-                Content()
+                Content(scaffoldState)
+            }
+
+            // Dialog
+            if (viewMode.openHelpDialog) {
+                HelpDialog(viewMode)
+            }
+            if (viewMode.openEffectDialog) {
+                EffectDialog(context = context, viewMode = viewMode)
+            }
+            if (viewMode.openSaveDialog) {
+                SaveDialog(viewMode = viewMode, scaffoldState = scaffoldState)
+            }
+            if (viewMode.openImportDialog) {
+                ImportDialog(viewMode = viewMode, scaffoldState = scaffoldState)
             }
         }
     }
 }
 
 @Composable
-private fun Content() {
+private fun Content(scaffoldState: ScaffoldState) {
     Column(modifier = Modifier.fillMaxSize()) {
-        ContentSystemPredefined()
+        ContentSystemPredefined(scaffoldState)
         ContentAppPredefined()
         ContentFreeTest()
         ContentDiy()
@@ -116,8 +128,9 @@ private fun Content() {
 
 @SuppressLint("InlinedApi")
 @Composable
-fun ContentSystemPredefined() {
+fun ContentSystemPredefined(scaffoldState: ScaffoldState) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var isUsingAble = true
     if (Build.VERSION.SDK_INT < 29) {
         isUsingAble = false
@@ -153,16 +166,23 @@ fun ContentSystemPredefined() {
                     },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    enabled = isUsingAble
                 )
 
                 Button(onClick = {
                     try {
                         VibratorHelper.instance.vibratePredefined(inputText.toInt())
-                    } catch (e: IllegalArgumentException) {
-                        Toast.makeText(context, R.string.advanced_toast_systemCustomize_notSupportVlue, Toast.LENGTH_SHORT).show()
+                    } catch (e: Throwable) {
+                        Log.e(TAG, "ContentSystemPredefined: 启动系统预设失败", e)
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(context.getString(R.string.advanced_toast_systemCustomize_notSupportVlue))
+                        }
                     }
-                }, modifier = Modifier.padding(start = 8.dp)) {
+                },
+                    modifier = Modifier.padding(start = 8.dp),
+                    enabled = isUsingAble
+                ) {
                     Text(stringResource(R.string.advanced_btn_system_customize_start))
                 }
             }
@@ -204,7 +224,6 @@ fun ContentSystemPredefined() {
 
 @Composable
 fun ContentAppPredefined() {
-    val context = LocalContext.current
     Column(modifier = Modifier.padding(start = 8.dp, top = 16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.advanced_text_app_predefined))
@@ -214,12 +233,7 @@ fun ContentAppPredefined() {
             .fillMaxWidth()
             .padding(top = 8.dp)) {
             Button(onClick = {
-                if (appPreSelectIndex == 4) {
-                    Toast.makeText(context, R.string.advanced_btn_pre_wait, Toast.LENGTH_LONG).show()
-                }
-                else {
-                    PredefinedEffect.startPreEffect(appPreSelectIndex)
-                }
+                PredefinedEffect.startPreEffect(appPreSelectIndex)
             }) {
                 Text(stringResource(R.string.advanced_btn_pre_start))
             }
@@ -538,9 +552,8 @@ fun AppPreDropMenu() {
 
 @Composable
 private fun FloatButton() {
-    val context = LocalContext.current
     FloatingActionButton(onClick = {
-        AdvancedUtil.clickHelpBtn(context)
+        viewMode.openHelpDialog = true
     }) {
         Icon(painter = painterResource(android.R.drawable.ic_menu_help),
             contentDescription = stringResource(R.string.advanced_fab_description)

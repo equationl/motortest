@@ -12,6 +12,10 @@ class MyViewMode: ViewModel() {
 
     var isSupportAdvanced = true
 
+    var timings = ""
+    var amplitude = ""
+    var repeateI = ""
+
     var isVibrated by mutableStateOf(false)
 
     var currentPage by mutableStateOf(0)
@@ -27,6 +31,11 @@ class MyViewMode: ViewModel() {
     var timingsText by mutableStateOf("")
     var amplitudesText by mutableStateOf("")
     var repeatText by mutableStateOf("")
+
+    var openHelpDialog by mutableStateOf(false)
+    var openEffectDialog by mutableStateOf(false)
+    var openSaveDialog by mutableStateOf(false)
+    var openImportDialog by mutableStateOf(false)
 
     var visualTimings = "0"
     var visualAmplitude = "0"

@@ -85,6 +85,7 @@
         <![CDATA[
          <h3>1.41</h3>
         *修复在不兼容的设备中上滑会出现空白页的问题<br />
+        *完全迁移至 compose<br />
 
         <h3>1.40</h3>
         *新增图形化创建震动序列支持添加无振动（振幅为 0）<br />
@@ -134,7 +135,6 @@
     <string name="advanced_dialog_tab_update">更新</string>
     <string name="advanced_action_run_background">后台振动</string>
     <string name="advanced_action_customize_system_default">自定义系统预设</string>
-    <string name="advanced_btn_pre_wait">敬请期待</string>
     <string name="advanced_edit_diy_tip_text_empty">字段不能为空</string>
     <string name="advanced_fab_description">帮助</string>
     <string name="advanced_fab_help_title">使用说明</string>
@@ -157,16 +157,12 @@
     <string name="advanced_diy_import_text_isEmpty">数据不能为空</string>
     <string name="advanced_diy_import_fail">导入失败！</string>
     <string name="advanced_diy_start_fail">创建振动失败：%1$s</string>
+    <string name="advanced_saveList_empty">没有已保存数据</string>
 
     <string name="visualization_sideBar_text_strong">强</string>
     <string name="visualization_sideBar_text_weak">弱</string>
     <string name="visualization_btn_save">保存</string>
     <string name="visualization_btn_back">返回</string>
-    <string name="visualization_text_time">00:00</string>
-    <string name="visualization_text_default_amplitude">0</string>
-    <string name="visualization_text_time_sec">%.3f s</string>
-    <string name="visualization_text_amplitude">%1$d</string>
-
 
     <string name="main_text_click_start">点击以开始振动</string>
     <string name="main_text_click_stop">点击以停止振动</string>

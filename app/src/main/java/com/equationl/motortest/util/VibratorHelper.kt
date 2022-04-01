@@ -101,7 +101,8 @@ class VibratorHelper {
             vibrator.vibrate(vibrationEffect)
         }
         else {
-            throw IllegalStateException("系统预设效果就暂时不适配了")
+            // 系统预设效果就暂时不适配了
+            throw UnsupportedOperationException("该系统不支持系统预设振动")
         }
     }
 
