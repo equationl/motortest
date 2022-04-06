@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -46,7 +47,7 @@ fun VisualizationScreen(isDarkTheme: Boolean = isSystemInDarkTheme()) {
     MaterialTheme(
         colors = if (isDarkTheme) DarkColors else LightColors
     ) {
-        Column(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().background(if (isDarkTheme) Color.DarkGray else Color.White)) {
             Row(
                 Modifier
                     .fillMaxWidth()

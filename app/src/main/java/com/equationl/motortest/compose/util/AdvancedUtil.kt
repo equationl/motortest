@@ -2,7 +2,6 @@ package com.equationl.motortest.compose.util
 
 import android.content.Context
 import android.content.Intent
-import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.util.Base64
 import android.util.Log
@@ -22,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.Dialog
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
 import com.equationl.motortest.R
 import com.equationl.motortest.compose.MyViewMode
 import com.equationl.motortest.database.DatabaseHelper
@@ -46,7 +47,8 @@ private fun NormalDialog(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(
-                    Color.White, shape = RoundedCornerShape(8.dp)
+                    if (isSystemInDarkTheme()) Color.DarkGray else Color.White,
+                    shape = RoundedCornerShape(8.dp)
                 )
                 .padding(16.dp)
         ) {
@@ -152,8 +154,9 @@ private fun HtmlText(html: String, modifier: Modifier = Modifier) {
         modifier = modifier,
         factory = { context -> TextView(context) },
         update = {
+            it.text = HtmlCompat.fromHtml(html, FROM_HTML_MODE_COMPACT)
             it.movementMethod = LinkMovementMethod.getInstance()
-            it.text = Html.fromHtml(html, 16)
+            it.setTextColor(android.graphics.Color.parseColor("#000000"))
         }
     )
 }

@@ -6,8 +6,7 @@
 
 当前最新版本用于实践从普通 xml view 到 compose 的迁移。
 
-当前已使用 compose 重构了大部分界面。
-（除自定义 view 和 AlertDialog 尚未迁移至 compose 外，其余界面已全部使用 compose 实现）
+当前已使用 compose 重构了所有界面。
 
 
 以下为旧版本简介：
